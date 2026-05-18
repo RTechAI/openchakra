@@ -3,6 +3,7 @@ import { useDropComponent } from '~hooks/useDropComponent'
 import { useInteractive } from '~hooks/useInteractive'
 import { Button } from '@chakra-ui/react'
 import icons from '~iconsList'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface Props {
   component: IComponent
@@ -34,7 +35,13 @@ const ButtonPreview = ({ component }: Props) => {
     }
   }
 
-  return <Button ref={ref} {...props} />
+  return (
+  <Button
+    ref={ref}
+    {...props}
+    {...forgeuiPositionProps(props)}
+  />
+)
 }
 
 export default ButtonPreview

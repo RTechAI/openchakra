@@ -1,14 +1,19 @@
 import React from 'react'
 
 import NumberControl from '~components/inspector/controls/NumberControl'
-import TextControl from '~components/inspector/controls/TextControl'
+import SizeControl from '~components/inspector/controls/SizeControl'
+import usePropsSelector from '~hooks/usePropsSelector'
 
 const ForgeUILayoutPanel = () => {
+  const positionMode = usePropsSelector('positionMode')
+
   return (
     <>
-      <TextControl
+      <SizeControl
         name="positionMode"
         label="Position Mode"
+        value={positionMode || 'flow'}
+        options={['flow', 'absolute']}
       />
 
       <NumberControl

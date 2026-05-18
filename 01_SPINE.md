@@ -30,77 +30,112 @@ SAVE POINT UPDATE
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_POSITION_LAYER_V1_ALIVE__2026-05-18
+FORGEUI_STUDIO_POSITION_LAYER_V1_PARTIAL_COVERAGE__2026-05-18
 
 Meaning:
-ForgeUI Studio now has the first embedded/HMI positioning layer alive inside the OpenChakra editor engine.
+ForgeUI Studio Position Layer V1 is alive and now partially wired across the OpenChakra preview system. The architecture is proven, but component coverage is not complete yet.
 
 Status:
-PROVEN ALIVE
+ALIVE / PARTIAL COVERAGE
 
-What was added:
-- ForgeUILayoutPanel created under src/forgeui/
-- ForgeUILayoutPanel mounted globally in Panels.tsx
-- inspector now exposes:
+What is now working:
+- ForgeUILayoutPanel exists under src/forgeui/
+- ForgeUILayoutPanel is mounted globally in Panels.tsx
+- inspector exposes:
   - positionMode
   - x
   - y
   - w
   - h
-- ForgeUIPositionProps helper created under src/forgeui/
-- PreviewContainer.tsx now applies ForgeUI absolute positioning
-- WithChildrenPreviewContainer.tsx now applies ForgeUI absolute positioning
+- positionMode is now a dropdown using SizeControl
+- dropdown options are:
+  - flow
+  - absolute
+- ForgeUIPositionProps helper exists under src/forgeui/
+- PreviewContainer.tsx applies ForgeUI positioning props
+- WithChildrenPreviewContainer.tsx applies ForgeUI positioning props
+- ButtonPreview.tsx patched and button absolute positioning works
+- NumberInputPreview.tsx patched
+- IconButtonPreview.tsx was being patched, but caused a compile error due to a bad paste / return outside function
+- replacement full IconButtonPreview.tsx was provided to restore compile
 
-Confirmed proof:
-- selected components show ForgeUI positioning fields in inspector
-- manual positionMode="absolute" works on some simple components
-- PreviewContainer path is partially proven
-- WithChildrenPreviewContainer path is wired but not fully validated
-- OpenChakra drag/drop still works
-- inspector still works
-- code panel still opens
-- editor remains alive on localhost:3000
+Important confirmed architecture:
+The positioning concept works.
+The issue is not the core positioning helper.
+The issue is coverage across custom preview components.
 
-Important limitation:
-Absolute positioning is NOT yet proven across all component types.
-Some components still clip, jump, or behave oddly due to Chakra wrapper/layout behavior.
+OpenChakra has two render categories:
 
- helper
-- OpenChakra drag/drop still works
-- inspector still works
-- code panel still opens
-- editor remains alive on localhost:3000
+1. Standard preview paths:
+- PreviewContainer
+- WithChildrenPreviewContainer
 
-Known rough edges:
-- positionMode is currently a text field
-- user must manually type absolute
-- blank x/y/w/h values fall back to helper defaults
-- components may jump to top-left when absolute mode is enabled with blank values
-- no grid snap yet
-- no drag-to-coordinate update yet
-- no bounds clamp yet
-- no LVGL export yet
+These can use ForgeUIPositionProps centrally.
 
-Correct next mission:
-Polish Position Layer V1 before adding coordinate drag/drop.
+2. Custom preview paths:
+- ButtonPreview
+- AvatarPreview
+- IconButtonPreview
+- SelectPreview
+- NumberInputPreview
+- AccordionPreview
+- BreadcrumbPreview
+- etc
 
-Next recommended work:
-1. Replace positionMode text field with a proper select/dropdown.
-2. Add sensible default x/y/w/h values.
-3. Add a clearer ForgeUI Position panel title/grouping.
-4. Add safer bounds/sanitising in ForgeUIPositionProps.
-5. Only after manual positioning feels stable, investigate drop-coordinate capture.
+These bypass the central wrappers and must be patched one by one if they are needed for embedded/HMI mode.
 
-Do NOT do yet:
-- Redux/state rewrite
-- drag/drop rewrite
-- LVGL export
-- snapping
-- full ForgeUI widget registry
-- giant editor refactor
+Current truth:
+Some components work with positionMode="absolute".
+Some components do not yet work because they bypass ForgeUIPositionProps.
+
+Known behavior:
+- setting positionMode="absolute" with blank x/y/w/h can move components toward top-left
+- helper defaults reduce this but do not solve every custom preview case
+- complex Chakra widgets may clip, stretch, or behave oddly
+- broad random testing is no longer useful
+
+Correct next development rule:
+Do not test every component blindly.
+Patch and verify one preview file at a time.
+
+Recommended next priority:
+1. Restore/fix IconButtonPreview.tsx compile.
+2. Confirm app runs again.
+3. Test only one component after each file edit.
+4. Patch SelectPreview.tsx.
+5. Patch NumberInputPreview.tsx if not already confirmed.
+6. Patch AvatarPreview.tsx only if needed.
+7. Ignore complex grouped widgets for now.
+
+Core embedded test set:
+- Text
+- Badge
+- Box
+- Button
+- IconButton
+- Select
+- NumberInput
+
+Do NOT prioritise yet:
+- Accordion
+- Breadcrumb
+- Tabs
+- Stat
+- Skeleton
+- Highlight
+- AvatarGroup
+
+Important lesson:
+From this point forward, patch custom preview files one at a time only.
+After each change:
+- save
+- let dev server rebuild
+- confirm compile
+- test that one component
+- then move to next
 
 Conclusion:
-This is the first real proof that ForgeUI Studio can become an embedded fixed-screen HMI/LVGL designer without rewriting the OpenChakra engine.
+ForgeUI Studio has now crossed from architecture discovery into preview coverage work. Position Layer V1 is viable, but not universal yet.
 ============================================================
 
 ============================================================

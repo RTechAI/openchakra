@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useInteractive } from '~hooks/useInteractive'
 import iconsList from '~iconsList'
 import { Select } from '@chakra-ui/react'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface IProps {
   component: IComponent
@@ -19,7 +20,11 @@ const SelectPreview = ({ component }: IProps) => {
   }, [icon])
 
   return (
-    <Select {...props} icon={Icon ? <Icon path="" /> : undefined}>
+    <Select
+  {...props}
+  {...forgeuiPositionProps(props)}
+  icon={Icon ? <Icon path="" /> : undefined}
+>
       <option value="option1">Option 1</option>
       <option value="option2">Option 2</option>
       <option value="option3">Option 3</option>

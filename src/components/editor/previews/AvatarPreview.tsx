@@ -11,6 +11,7 @@ import { useDropComponent } from '~hooks/useDropComponent'
 import ComponentPreview from '~components/editor/ComponentPreview'
 import { useSelector } from 'react-redux'
 import { getComponents } from '~core/selectors/components'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 const AvatarPreview: React.FC<IPreviewProps & {
   spacing?: BoxProps['marginLeft']
@@ -31,7 +32,11 @@ const AvatarPreview: React.FC<IPreviewProps & {
   }
 
   return (
-    <Box ref={drop(ref)} {...boxProps}>
+    <Box
+        ref={drop(ref)}
+        {...boxProps}
+        {...forgeuiPositionProps(props)}
+>
       <Avatar ml={index === 0 ? 0 : spacing} {...props}>
         {component.children.map((key: string) => (
           <ComponentPreview key={key} componentName={key} />

@@ -1,4 +1,5 @@
 import React from 'react'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 import { useInteractive } from '~hooks/useInteractive'
 import {
   NumberInput,
@@ -16,7 +17,7 @@ const NumberInputPreview = ({ component }: IProps) => {
   const { props } = useInteractive(component)
 
   return (
-    <NumberInput {...props}>
+    <NumberInput {...props} {...forgeuiPositionProps(props)}>
       <NumberInputField />
       <NumberInputStepper>
         <NumberIncrementStepper />

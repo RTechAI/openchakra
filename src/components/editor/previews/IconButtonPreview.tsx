@@ -3,6 +3,7 @@ import { useDropComponent } from '~hooks/useDropComponent'
 import { useInteractive } from '~hooks/useInteractive'
 import icons from '~iconsList'
 import { IconButton } from '@chakra-ui/react'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface Props {
   component: IComponent
@@ -22,8 +23,17 @@ const IconButtonPreview = ({ component }: Props) => {
   if (icon) {
     if (Object.keys(icons).includes(icon)) {
       const Icon = icons[icon as keyof typeof icons]
-      return <IconButton ref={ref} icon={<Icon path="" />} {...props} />
+
+      return (
+        <IconButton
+          ref={ref}
+          icon={<Icon path="" />}
+          {...props}
+          {...forgeuiPositionProps(props)}
+        />
+      )
     }
+
     return null
   }
 
