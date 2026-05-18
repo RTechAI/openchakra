@@ -8,13 +8,15 @@ import useDispatch from '~hooks/useDispatch'
 import { getComponents } from '~core/selectors/components'
 import { getShowLayout, getShowCode } from '~core/selectors/app'
 import ComponentPreview from '~components/editor/ComponentPreview'
+import { FORGEUI_ACTIVE_DEVICE } from '~forgeui/ForgeUIDeviceConfig'
+
+const GRID_SIZE = FORGEUI_ACTIVE_DEVICE.gridSize
 
 export const gridStyles = {
   backgroundImage:
-    'linear-gradient(to right, #d9e2e9 1px, transparent 1px),linear-gradient(to bottom, #d9e2e9 1px, transparent 1px);',
-  backgroundSize: '20px 20px',
-  bgColor: '#edf2f6',
-  p: 10,
+    'linear-gradient(to right, rgba(56, 189, 248, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(56, 189, 248, 0.12) 1px, transparent 1px)',
+  backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+  bgColor: '#07111f',
 }
 
 const Editor: React.FC = () => {
@@ -37,47 +39,55 @@ const Editor: React.FC = () => {
     editorBackgroundProps = gridStyles
   }
 
-  editorBackgroundProps = {
-    ...editorBackgroundProps,
+  const deviceProps = {
     ...rootProps,
   }
 
   const Playground = (
     <Box
-      p={2}
       {...editorBackgroundProps}
       height="100%"
-      minWidth="10rem"
       width="100%"
-      display={isEmpty ? 'flex' : 'block'}
-      justifyContent="center"
-      alignItems="center"
+      minWidth="10rem"
       overflow="auto"
-      ref={drop}
       position="relative"
-      flexDirection="column"
+      p={8}
       onClick={onSelectBackground}
     >
-      {isEmpty && (
-        <Text maxWidth="md" color="gray.400" fontSize="xl" textAlign="center">
-          Drag some component to start coding without code! Or load{' '}
-          <Link
-            color="gray.500"
-            onClick={(e: React.MouseEvent) => {
-              e.stopPropagation()
-              dispatch.components.loadDemo('onboarding')
-            }}
-            textDecoration="underline"
-          >
-            the onboarding components
-          </Link>
-          .
-        </Text>
-      )}
+      <Box
+        bg="#101826"
+        border="1px solid rgba(56, 189, 248, 0.45)"
+        boxShadow="0 0 0 1px rgba(255,255,255,0.04), 0 24px 80px rgba(0,0,0,0.45)"
+        borderRadius="14px"
+        overflow="hidden"
+        position="relative"
+        mx="auto"
+        my={4}
+        {...deviceProps}
+        ref={drop}
+        width={`${FORGEUI_ACTIVE_DEVICE.width}px`}
+        height={`${FORGEUI_ACTIVE_DEVICE.height}px`}
+        minWidth={`${FORGEUI_ACTIVE_DEVICE.width}px`}
+        minHeight={`${FORGEUI_ACTIVE_DEVICE.height}px`}
+        maxWidth={`${FORGEUI_ACTIVE_DEVICE.width}px`}
+        maxHeight={`${FORGEUI_ACTIVE_DEVICE.height}px`}
+        display={isEmpty ? 'flex' : 'block'}
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+      >
+        {isEmpty && (
+          <Text maxWidth="md" color="gray.400" fontSize="xl" textAlign="center">
+            Drag ForgeUI components onto the ESP32-P4 screen.
+            <br />
+            Active target: {FORGEUI_ACTIVE_DEVICE.name}
+          </Text>
+        )}
 
-      {components.root.children.map((name: string) => (
-        <ComponentPreview key={name} componentName={name} />
-      ))}
+        {components.root.children.map((name: string) => (
+          <ComponentPreview key={name} componentName={name} />
+        ))}
+      </Box>
     </Box>
   )
 
