@@ -26,30 +26,253 @@ P4 fixed-device viewport architecture proven.
 Editor engine mapped far enough to plan embedded/HMI mode safely.
 
 ============================================================
-CURRENT SAVE POINT
+SAVE POINT UPDATE
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_P4_VIEWPORT_ARCHITECTURE_LOCKED__2026-05-18
+FORGEUI_STUDIO_POSITION_LAYER_V1_ALIVE__2026-05-18
 
 Meaning:
-ForgeUI Studio is now locked around a fixed embedded device viewport workflow,
-not a generic responsive web-page builder workflow.
+ForgeUI Studio now has the first embedded/HMI positioning layer alive inside the OpenChakra editor engine.
 
-Current known-good state:
-- OpenChakra cloned and running locally
-- npm install works with legacy peer dependency flag
-- npm run dev works
-- localhost:3000 alive
-- drag/drop alive
-- inspector/property editing alive
-- ForgeUI Studio branding partially applied
-- dark embedded-style workbench applied
-- fixed ESP32-P4 viewport visible
-- active target label visible
-- grid now follows active device config
-- device size comes from ForgeUI device config
-- root viewport sizing locked so saved root props cannot override device size
+Status:
+PROVEN ALIVE
+
+What was added:
+- ForgeUILayoutPanel created under src/forgeui/
+- ForgeUILayoutPanel mounted globally in Panels.tsx
+- inspector now exposes:
+  - positionMode
+  - x
+  - y
+  - w
+  - h
+- ForgeUIPositionProps helper created under src/forgeui/
+- PreviewContainer.tsx now applies ForgeUI absolute positioning
+- WithChildrenPreviewContainer.tsx now applies ForgeUI absolute positioning
+
+Confirmed proof:
+- selected components show ForgeUI positioning fields in inspector
+- manual positionMode="absolute" works on some simple components
+- PreviewContainer path is partially proven
+- WithChildrenPreviewContainer path is wired but not fully validated
+- OpenChakra drag/drop still works
+- inspector still works
+- code panel still opens
+- editor remains alive on localhost:3000
+
+Important limitation:
+Absolute positioning is NOT yet proven across all component types.
+Some components still clip, jump, or behave oddly due to Chakra wrapper/layout behavior.
+
+ helper
+- OpenChakra drag/drop still works
+- inspector still works
+- code panel still opens
+- editor remains alive on localhost:3000
+
+Known rough edges:
+- positionMode is currently a text field
+- user must manually type absolute
+- blank x/y/w/h values fall back to helper defaults
+- components may jump to top-left when absolute mode is enabled with blank values
+- no grid snap yet
+- no drag-to-coordinate update yet
+- no bounds clamp yet
+- no LVGL export yet
+
+Correct next mission:
+Polish Position Layer V1 before adding coordinate drag/drop.
+
+Next recommended work:
+1. Replace positionMode text field with a proper select/dropdown.
+2. Add sensible default x/y/w/h values.
+3. Add a clearer ForgeUI Position panel title/grouping.
+4. Add safer bounds/sanitising in ForgeUIPositionProps.
+5. Only after manual positioning feels stable, investigate drop-coordinate capture.
+
+Do NOT do yet:
+- Redux/state rewrite
+- drag/drop rewrite
+- LVGL export
+- snapping
+- full ForgeUI widget registry
+- giant editor refactor
+
+Conclusion:
+This is the first real proof that ForgeUI Studio can become an embedded fixed-screen HMI/LVGL designer without rewriting the OpenChakra engine.
+============================================================
+
+============================================================
+POSITION LAYER INVESTIGATION UPDATE
+============================================================
+
+Confirmed files inspected:
+
+- WithChildrenPreviewContainer.tsx
+- PreviewContainer.tsx
+- utils/defaultProps.ts
+- NumberControl.tsx
+- NumberInputPanel.tsx
+- Panels.tsx
+
+Important confirmed architecture:
+
+OpenChakra already has a clean enough path for ForgeUI embedded positioning.
+
+The safest positioning layer is NOT inside individual component panels.
+
+Do NOT add X/Y/W/H controls separately into ButtonPanel, BoxPanel, TextPanel, etc.
+
+Correct architecture:
+Create one shared ForgeUI layout/position inspector panel and mount it globally in Panels.tsx.
+
+Recommended future file:
+
+src/forgeui/ForgeUILayoutPanel.tsx
+
+or:
+
+src/components/inspector/panels/forgeui/ForgeUILayoutPanel.tsx
+
+Purpose:
+A global embedded layout panel for selected components.
+
+Initial controls:
+- positionMode
+- x
+- y
+- w
+- h
+
+Recommended first props:
+positionMode: "flow" | "absolute"
+x: number
+y: number
+w: number
+h: number
+
+NumberControl is already reusable and can be used for:
+- X
+- Y
+- Width
+- Height
+
+Panels.tsx is the correct mount point.
+
+Future pattern:
+
+<>
+  <ForgeUILayoutPanel />
+
+  {type === 'Button' && <ButtonPanel />}
+  {type === 'Box' && <BoxPanel />}
+  ...
+</>
+
+Reason:
+Positioning is editor/runtime layout metadata.
+It is not component-specific behavior.
+
+Preview architecture finding:
+
+There are two preview wrappers:
+
+1.
+WithChildrenPreviewContainer.tsx
+
+Used for child-capable components.
+It is also a drop target.
+It currently forces:
+
+pos: 'relative'
+
+This must not be deleted blindly.
+
+Future absolute mode should override this only when:
+
+positionMode === "absolute"
+
+2.
+PreviewContainer.tsx
+
+Used for simple components.
+It currently passes props directly into React.createElement.
+
+Both wrappers will need the same ForgeUI positioning behavior later.
+
+Correct future helper:
+
+src/forgeui/ForgeUIPositionProps.ts
+
+Purpose:
+Convert ForgeUI embedded layout props into safe Chakra preview props.
+
+Future shape:
+
+export function forgeuiPositionProps(props: any) {
+  if (props?.positionMode !== "absolute") {
+    return {}
+  }
+
+  return {
+    pos: "absolute",
+    left: Number(props.x || 0),
+    top: Number(props.y || 0),
+    width: Number(props.w || 160),
+    height: Number(props.h || 80),
+  }
+}
+
+Important:
+Do not duplicate position logic in both preview containers.
+
+Use one shared helper later.
+
+DEFAULT_PROPS finding:
+
+utils/defaultProps.ts is the component birth/default prop layer.
+
+It is a safe future place to add default ForgeUI positioning props for ForgeUI-native widgets.
+
+Example future ForgeUI-native defaults:
+
+FGTile: {
+  positionMode: "absolute",
+  x: 40,
+  y: 40,
+  w: 240,
+  h: 120
+}
+
+Do not add embedded defaults globally to every existing Chakra component yet.
+
+First implementation rule:
+Manual inspector positioning first.
+
+Do NOT do yet:
+- coordinate drag/drop
+- grid snapping
+- bounds clamp
+- LVGL export
+- Redux/state rewrite
+- rewriting useDropComponent
+- changing current tree model
+
+Correct sequence:
+1. Add ForgeUILayoutPanel.
+2. Mount it globally in Panels.tsx.
+3. Add position props manually through inspector.
+4. Add shared ForgeUIPositionProps helper.
+5. Apply helper to PreviewContainer and WithChildrenPreviewContainer.
+6. Only after manual absolute positioning works, add drop coordinate capture.
+7. Only after positioning is stable, add LVGL export mapping.
+
+Current conclusion:
+ForgeUI Studio can add embedded/HMI positioning as a bolt-on layer beside the existing OpenChakra flow layout engine.
+
+This keeps current Chakra drag/drop alive while opening the path toward LVGL-style fixed-screen design.
+============================================================
 
 ============================================================
 PROJECT LOCATION

@@ -3,6 +3,7 @@ import { useInteractive } from '~hooks/useInteractive'
 import { useDropComponent } from '~hooks/useDropComponent'
 import ComponentPreview from '~components/editor/ComponentPreview'
 import { Box } from '@chakra-ui/react'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 const WithChildrenPreviewContainer: React.FC<{
   component: IComponent
@@ -18,7 +19,12 @@ const WithChildrenPreviewContainer: React.FC<{
 }) => {
   const { drop, isOver } = useDropComponent(component.id)
   const { props, ref } = useInteractive(component, enableVisualHelper)
-  const propsElement = { ...props, ...forwardedProps, pos: 'relative' }
+  const propsElement = {
+  ...props,
+  ...forwardedProps,
+  pos: 'relative',
+  ...forgeuiPositionProps(props),
+}
 
   if (!isBoxWrapped) {
     propsElement.ref = drop(ref)

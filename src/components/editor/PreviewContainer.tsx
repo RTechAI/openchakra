@@ -1,6 +1,7 @@
 import React, { FunctionComponent, ComponentClass } from 'react'
 import { useInteractive } from '~hooks/useInteractive'
 import { Box } from '@chakra-ui/react'
+import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 const PreviewContainer: React.FC<{
   component: IComponent
@@ -17,10 +18,11 @@ const PreviewContainer: React.FC<{
   const { props, ref } = useInteractive(component, enableVisualHelper)
 
   const children = React.createElement(type, {
-    ...props,
-    ...forwardedProps,
-    ref,
-  })
+  ...props,
+  ...forwardedProps,
+  ...forgeuiPositionProps(props),
+  ref,
+})
 
   if (isBoxWrapped) {
     let boxProps: any = {}

@@ -54,6 +54,7 @@ import TabPanel from './components/TabPanel'
 import StatArrowPanel from './components/StatArrowPanel'
 import StatLabelPanel from './components/StatLabelPanel'
 import SkeletonPanel from './components/SkeletonPanel'
+import ForgeUILayoutPanel from '~forgeui/ForgeUILayoutPanel'
 
 const Panels: React.FC<{ component: IComponent; isRoot: boolean }> = ({
   component,
@@ -66,7 +67,9 @@ const Panels: React.FC<{ component: IComponent; isRoot: boolean }> = ({
   }
 
   return (
-    <>
+  <>
+    <ForgeUILayoutPanel />
+
       {type === 'Button' && <ButtonPanel />}
       {type === 'Checkbox' && <CheckboxPanel />}
       {type === 'Box' && <BoxPanel />}
