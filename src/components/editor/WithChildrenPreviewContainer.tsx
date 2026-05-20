@@ -19,42 +19,31 @@ const WithChildrenPreviewContainer: React.FC<{
 }) => {
   const { drop, isOver } = useDropComponent(component.id)
   const { props, ref } = useInteractive(component, enableVisualHelper)
-  const propsElement = {
-  ...props,
-  ...forwardedProps,
-  pos: 'relative',
-  ...forgeuiPositionProps(props),
-}
-
-  if (!isBoxWrapped) {
-    propsElement.ref = drop(ref)
-  }
-
-  if (isOver) {
-    propsElement.bg = 'teal.50'
-  }
 
   const children = React.createElement(
     type,
-    propsElement,
+    {
+      ...props,
+      ...forwardedProps,
+      pos: 'relative',
+      width: '100%',
+      height: '100%',
+    },
     component.children.map((key: string) => (
       <ComponentPreview key={key} componentName={key} />
     )),
   )
 
-  if (isBoxWrapped) {
-    let boxProps: any = {
-      display: 'inline',
-    }
-
-    return (
-      <Box {...boxProps} ref={drop(ref)}>
-        {children}
-      </Box>
-    )
-  }
-
-  return children
+  return (
+    <Box
+      ref={drop(ref)}
+      {...forgeuiPositionProps(props)}
+      bg={isOver ? 'teal.50' : undefined}
+      position={props.positionMode === 'absolute' ? 'absolute' : 'relative'}
+    >
+      {children}
+    </Box>
+  )
 }
 
 export default WithChildrenPreviewContainer

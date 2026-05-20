@@ -20,10 +20,20 @@ export const useInteractive = (
   const focusInput = useSelector(getFocusedComponent(component.id))
 
   const [, drag] = useDrag({
-    item: { id: component.id, type: component.type, isMoved: true },
+    item: {
+      id: component.id,
+      type: component.type,
+      isMoved: true,
+      positionMode: component.props?.positionMode,
+      x: component.props?.x,
+      y: component.props?.y,
+      w: component.props?.w,
+      h: component.props?.h,
+    },
   })
 
   const ref = useRef<HTMLDivElement>(null)
+
   let props = {
     ...(withoutComponentProps ? {} : component.props),
     onMouseOver: (event: MouseEvent) => {

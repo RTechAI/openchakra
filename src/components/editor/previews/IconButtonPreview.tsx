@@ -19,6 +19,8 @@ const IconButtonPreview = ({ component }: Props) => {
   if (isOver) {
     props.bg = 'teal.50'
   }
+  
+// IconButton: positioning OK, icon render unresolved
 
   if (icon) {
     if (Object.keys(icons).includes(icon)) {

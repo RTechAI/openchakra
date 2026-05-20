@@ -1,113 +1,217 @@
-<div align="center" style="display:flex;flex-direction:column;">
-  <a href="https://openchakra.app">
-    <img src="./public/images/github-banner.png" alt="Openchakra: Visual editor for Chakra UI." />
-  </a>
-  <h3>Visual Editor for Chakra UI</h3>
-</div>
+# ForgeUI Studio
 
-OpenChakra is a visual editor for the best component library in town: [Chakra UI](https://chakra-ui.com) 🤗. Quickly draft components with the simple drag and drop UI.
+ForgeUI Studio is an embedded UI and HMI designer built on top of the OpenChakra editor engine.
 
-👉 [https://openchakra.app](https://openchakra.app)
+The project is focused on:
+- ESP32-P4 UI design
+- LVGL-style screen workflows
+- embedded touchscreen layouts
+- fixed-resolution HMI design
+- future LVGL export tooling
 
-## Features
+Current target hardware:
+- Waveshare ESP32-P4-WIFI6-Touch-LCD-7B
+- 1024x600 embedded viewport
 
-- 🎨 Drag and drop [Chakra UI](https://chakra-ui.com/getting-started) components
-- 💅 Preset components
-- 👀 Live props editing and styling
-- ⚛️ Production-ready code
-- 🎈 CodeSandbox export
-- 🔮 Undo/redo edit
-- 💽 Localstorage sync
+---
 
-[![Screenshot](./public/images/screenshot.png)](https://openchakra.app)
+# PROJECT STATUS
 
-## Getting started
+Status:
+ALIVE
 
-### Builder mode
+Current stage:
+Embedded coordinate-based editor architecture proven.
 
-The Builder mode adds extra padding/border to ease components selection (like containers).
+Current major milestones achieved:
+- fixed embedded viewport
+- absolute positioning
+- persistent x/y movement
+- persistent width/height resizing
+- wrapper-owned interaction layer
+- viewport-local drag/drop
+- embedded workbench architecture
+- resize handles V1 alive
 
-> 💡Toggle the Builder mode with the `b` shortcut
+ForgeUI Studio is evolving from:
+- responsive web builder
 
-### Code panel
+toward:
+- embedded HMI editor
+- ESP32-P4 touchscreen designer
+- future LVGL visual editor
 
-Toggle the code panel for viewing the JSX/React code of your components. You can even export your code directly to CodeSandbox!
+---
 
-> 💡Toggle the Code panel with the `c` shortcut
+# CURRENT FEATURES
 
-### Components panel
+Working:
+- drag/drop widget placement
+- fixed ESP32-P4 viewport
+- coordinate positioning
+- x/y inspector editing
+- w/h inspector editing
+- persistent movement
+- persistent resize
+- viewport bounds clamp
+- component selection
+- wrapper-owned interaction architecture
 
-Drag any component from the left hand panel into this editor. Then start interacting with them.
-You can drag a preset: it's a group of components (like Alert). Just drop a preset to easily setup a complex component!
+Current working widgets include:
+- Badge
+- Button
+- Code
+- Image
+- Input
+- Select
 
-### Inspector
+Some Chakra components still require normalization work for consistent embedded resizing behavior.
 
-**Update props & style**
+---
 
-On the right hand-side, you can find the inspector panel. You will find the tools to edit the component's props and style.
+# ARCHITECTURE DIRECTION
 
-**Delete, reset and documentation**
+ForgeUI Studio is NOT intended to become another generic responsive web-page builder.
 
-Reach the yellow bar on the top to delete, reset and access the Chakra documentation of each component.
+The intended direction is:
 
-**Sort components**
+ForgeUI Studio
+->
+embedded touchscreen designer
+->
+ESP32-P4 visual editor
+->
+LVGL-oriented workflow
+->
+future LVGL export system
 
-By clicking on a component containing children, you will see a Children panel appearing on the right. It enables sorting the children.
+Long-term goals include:
+- embedded widget systems
+- fixed-screen page design
+- industrial touchscreen workflows
+- dashboard/kiosk design
+- ForgeUI-native components
+- LVGL export/code generation
 
-### Editor Shortcuts
+---
 
-| Shortcut         | Description               |
-| ---------------- | ------------------------- |
-| `cmd+Z` `ctrl+Z` | Undo last action          |
-| `cmd+Y` `ctrl+y` | Redo action               |
-| `cmd+D` `ctrl+d` | Duplicate component       |
-| `del`            | Delete selected component |
-| `c`              | Toggle Code panel         |
-| `b`              | Toggle Builder mode       |
-| `p`              | Select parent component   |
-| `Esc`            | Unselect component        |
+# IMPORTANT ARCHITECTURE RULES
 
-## Roadmap
+- Do NOT rewrite the editor engine
+- Keep interaction centralized
+- Keep sizing centralized
+- Keep positioning centralized
+- Use wrapper-owned interaction
+- Treat Chakra as render layer only
+- Keep ForgeUI additions modular
 
-- More Chakra UI components integration
-- Components copy
-- Props panel improvements
-- Code generation improvements
-- Dark mode support
-- Custom presets
-- Custom theme
-- Handle PseudoBox state (hover, active…)
-- Fix bugs 🧨
-- Support other UI (Material, Reakit...)
+Current interaction ownership direction:
 
-## Contributors
+Wrapper layer owns:
+- drag
+- resize
+- selection
+- hover
+- overlays
+- snap guides
+- alignment helpers
 
-This project is being developed by [Premier Octet](https://www.premieroctet.com), a Web and mobile agency specializing in React and React Native developments.
+Child component owns:
+- visual rendering only
 
-### Code Contributors
+---
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/premieroctet/openchakra/graphs/contributors"><img src="https://opencollective.com/openchakra/contributors.svg?width=890&button=false" /></a>
+# CURRENT TECH STACK
 
-### Financial Contributors
+Base Engine:
+- OpenChakra
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/openchakra/contribute)]
+Framework:
+- React
+- Next.js
+- Chakra UI
 
-#### Individuals
+Editor Extensions:
+- react-rnd
+- ForgeUI wrapper interaction layer
 
-<a href="https://opencollective.com/openchakra"><img src="https://opencollective.com/openchakra/individuals.svg?width=890"></a>
+Future Targets:
+- LVGL
+- ESP32-P4
+- embedded UI workflows
 
-#### Organizations
+---
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/openchakra/contribute)]
+# PROJECT STRUCTURE DIRECTION
 
-<a href="https://opencollective.com/openchakra/organization/0/website"><img src="https://opencollective.com/openchakra/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/1/website"><img src="https://opencollective.com/openchakra/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/2/website"><img src="https://opencollective.com/openchakra/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/3/website"><img src="https://opencollective.com/openchakra/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/4/website"><img src="https://opencollective.com/openchakra/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/5/website"><img src="https://opencollective.com/openchakra/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/6/website"><img src="https://opencollective.com/openchakra/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/7/website"><img src="https://opencollective.com/openchakra/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/8/website"><img src="https://opencollective.com/openchakra/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/openchakra/organization/9/website"><img src="https://opencollective.com/openchakra/organization/9/avatar.svg"></a>
+Recommended ForgeUI-specific logic lives under:
+
+src/forgeui/
+
+Current important files include:
+- ForgeUIDeviceConfig.ts
+- ForgeUIPositionProps.ts
+- PreviewContainer.tsx
+- WithChildrenPreviewContainer.tsx
+
+---
+
+# DEVELOPMENT STATUS
+
+Current architecture is now technically credible as:
+- embedded UI editor
+- ESP32-P4 designer
+- touchscreen HMI designer
+- future LVGL visual tooling platform
+
+This project is no longer:
+- "build editor from scratch"
+
+The project is now:
+- adapting a mature editor engine toward embedded tooling workflows
+
+This dramatically reduces complexity and risk.
+
+---
+
+# UPSTREAM PROJECT
+
+ForgeUI Studio is built on top of the OpenChakra project.
+
+Original upstream project:
+https://github.com/premieroctet/openchakra
+
+Original upstream author:
+Premier Octet
+
+OpenChakra license:
+MIT
+
+ForgeUI Studio heavily extends and modifies the original editor toward:
+- embedded workflows
+- coordinate-based editing
+- ESP32-P4 tooling
+- LVGL-oriented workflows
+
+The original MIT license and attribution remain preserved in this repository.
+
+---
+
+# LICENSE
+
+ForgeUI Studio includes upstream MIT-licensed components from OpenChakra and other open-source projects.
+
+Please see:
+- LICENSE
+- THIRD_PARTY_LICENSES.md
+
+---
+
+# CREATED BY
+
+Scott Forster
+
+ForgeUI Project
+
+Contact:
+forgeui.esp32@gmail.com

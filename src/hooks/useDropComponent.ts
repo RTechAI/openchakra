@@ -1,12 +1,18 @@
+import { RefObject } from 'react'
 import { useDrop, DropTargetMonitor } from 'react-dnd'
 import { rootComponents } from '~utils/editor'
 import useDispatch from './useDispatch'
 import builder from '~core/models/composer/builder'
 
+const clamp = (value: number, min: number, max: number) => {
+  return Math.max(min, Math.min(value, max))
+}
+
 export const useDropComponent = (
   componentId: string,
   accept: (ComponentType | MetaComponentType)[] = rootComponents,
   canDrop: boolean = true,
+  viewportRef?: RefObject<HTMLDivElement | null>,
 ) => {
   const dispatch = useDispatch()
 
@@ -20,20 +26,76 @@ export const useDropComponent = (
         return
       }
 
-      if (item.isMoved) {
-        dispatch.components.moveComponent({
-          parentId: componentId,
-          componentId: item.id,
-        })
-      } else if (item.isMeta) {
-        dispatch.components.addMetaComponent(builder[item.type](componentId))
-      } else {
-        dispatch.components.addComponent({
-          parentName: componentId,
-          type: item.type,
-          rootParentType: item.rootParentType,
-        })
+      const clientOffset = monitor.getClientOffset()
+      const viewportRect = viewportRef?.current?.getBoundingClientRect()
+
+      if (!clientOffset || !viewportRect) {
+        return
       }
+
+      if (item.isMoved) {
+        const w = Number(item.w ?? 240)
+        const h = Number(item.h ?? 120)
+
+        const x = clamp(
+          Math.round(clientOffset.x - viewportRect.left - w / 2),
+          0,
+          Math.round(viewportRect.width - w),
+        )
+
+        const y = clamp(
+          Math.round(clientOffset.y - viewportRect.top - h / 2),
+          0,
+          Math.round(viewportRect.height - h),
+        )
+
+        dispatch.components.updateProps({
+          id: item.id,
+          name: 'x',
+          value: String(x),
+        })
+
+        dispatch.components.updateProps({
+          id: item.id,
+          name: 'y',
+          value: String(y),
+        })
+
+        return
+      }
+
+      if (item.isMeta) {
+        dispatch.components.addMetaComponent(builder[item.type](componentId))
+        return
+      }
+
+      const defaultW = 240
+      const defaultH = 120
+
+      const x = clamp(
+        Math.round(clientOffset.x - viewportRect.left - defaultW / 2),
+        0,
+        Math.round(viewportRect.width - defaultW),
+      )
+
+      const y = clamp(
+        Math.round(clientOffset.y - viewportRect.top - defaultH / 2),
+        0,
+        Math.round(viewportRect.height - defaultH),
+      )
+
+      dispatch.components.addComponent({
+        parentName: componentId,
+        type: item.type,
+        rootParentType: item.rootParentType,
+        props: {
+          positionMode: 'absolute',
+          x,
+          y,
+          w: defaultW,
+          h: defaultH,
+        },
+      })
     },
     canDrop: () => canDrop,
   })

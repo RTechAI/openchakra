@@ -153,7 +153,8 @@ const components = createModel({
         type: ComponentType
         rootParentType?: ComponentType
         testId?: string
-      },
+        props?: any
+    },
     ): ComponentsState {
       return produce(state, (draftState: ComponentsState) => {
         const id = payload.testId || generateId()
@@ -162,12 +163,15 @@ const components = createModel({
         draftState.components[payload.parentName].children.push(id)
         draftState.components[id] = {
           id,
-          props: defaultProps || {},
-          children: [],
-          type: payload.type,
-          parent: payload.parentName,
-          rootParentType: payload.rootParentType || payload.type,
-        }
+          props: {
+            ...(defaultProps || {}),
+            ...(payload.props || {}),
+            },
+            children: [],
+            type: payload.type,
+            parent: payload.parentName,
+            rootParentType: payload.rootParentType || payload.type,
+      }
       })
     },
     addMetaComponent(

@@ -20,7 +20,7 @@ const ButtonPreview = ({ component }: Props) => {
   if (props.leftIcon) {
     if (Object.keys(icons).includes(props.leftIcon)) {
       const Icon = icons[props.leftIcon as keyof typeof icons]
-      props.leftIcon = <Icon path="" />
+      props.leftIcon = <Icon />
     } else {
       props.leftIcon = undefined
     }
@@ -29,7 +29,7 @@ const ButtonPreview = ({ component }: Props) => {
   if (props.rightIcon) {
     if (Object.keys(icons).includes(props.rightIcon)) {
       const Icon = icons[props.rightIcon as keyof typeof icons]
-      props.rightIcon = <Icon path="" />
+      props.rightIcon = <Icon />
     } else {
       props.rightIcon = undefined
     }

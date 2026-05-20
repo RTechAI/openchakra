@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
-import { Box, Text, Link } from '@chakra-ui/react'
+import React, { memo, useRef } from 'react'
+import { Box, Text } from '@chakra-ui/react'
 import { useDropComponent } from '~hooks/useDropComponent'
 import SplitPane from 'react-split-pane'
 import CodePanel from '~components/CodePanel'
@@ -25,7 +25,9 @@ const Editor: React.FC = () => {
   const components = useSelector(getComponents)
   const dispatch = useDispatch()
 
-  const { drop } = useDropComponent('root')
+  const viewportRef = useRef<HTMLDivElement | null>(null)
+  const { drop } = useDropComponent('root', undefined, true, viewportRef)
+
   const isEmpty = !components.root.children.length
   const rootProps = components.root.props
 
@@ -64,7 +66,10 @@ const Editor: React.FC = () => {
         mx="auto"
         my={4}
         {...deviceProps}
-        ref={drop}
+        ref={(node: HTMLDivElement | null) => {
+         viewportRef.current = node
+         drop(node)
+        }}
         width={`${FORGEUI_ACTIVE_DEVICE.width}px`}
         height={`${FORGEUI_ACTIVE_DEVICE.height}px`}
         minWidth={`${FORGEUI_ACTIVE_DEVICE.width}px`}

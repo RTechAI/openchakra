@@ -11,11 +11,21 @@ export function forgeuiPositionProps(props: any) {
   const h = Number(props.h ?? 120)
 
   return {
-    pos: 'absolute',
-    left: Number.isFinite(x) ? x : 40,
-    top: Number.isFinite(y) ? y : 40,
-    width: Number.isFinite(w) ? w : 240,
-    height: Number.isFinite(h) ? h : 120,
-    zIndex: 1,
-  }
+  pos: 'absolute',
+
+  left: Number.isFinite(x) ? x : 40,
+  top: Number.isFinite(y) ? y : 40,
+
+  width: Number.isFinite(w) ? w : 240,
+  minWidth: Number.isFinite(w) ? w : 240,
+  maxWidth: Number.isFinite(w) ? w : 240,
+
+  height: Number.isFinite(h) ? h : 120,
+  minHeight: Number.isFinite(h) ? h : 120,
+  maxHeight: Number.isFinite(h) ? h : 120,
+
+  boxSizing: 'border-box',
+
+  zIndex: 1,
+}
 }

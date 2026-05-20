@@ -26,117 +26,242 @@ P4 fixed-device viewport architecture proven.
 Editor engine mapped far enough to plan embedded/HMI mode safely.
 
 ============================================================
-SAVE POINT UPDATE
+CURRENT SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_POSITION_LAYER_V1_PARTIAL_COVERAGE__2026-05-18
+FORGEUI_STUDIO_RESIZE_LAYER_PREP__WRAPPER_OWNERSHIP_ALIGNED__2026-05-20
 
 Meaning:
-ForgeUI Studio Position Layer V1 is alive and now partially wired across the OpenChakra preview system. The architecture is proven, but component coverage is not complete yet.
+ForgeUI Studio has moved beyond manual embedded positioning and now has a true coordinate-based editor foundation alive inside OpenChakra.
 
 Status:
-ALIVE / PARTIAL COVERAGE
+MAJOR BREAKTHROUGH / ALIVE
 
-What is now working:
-- ForgeUILayoutPanel exists under src/forgeui/
-- ForgeUILayoutPanel is mounted globally in Panels.tsx
-- inspector exposes:
-  - positionMode
-  - x
-  - y
-  - w
-  - h
-- positionMode is now a dropdown using SizeControl
-- dropdown options are:
-  - flow
-  - absolute
-- ForgeUIPositionProps helper exists under src/forgeui/
-- PreviewContainer.tsx applies ForgeUI positioning props
-- WithChildrenPreviewContainer.tsx applies ForgeUI positioning props
-- ButtonPreview.tsx patched and button absolute positioning works
-- NumberInputPreview.tsx patched
-- IconButtonPreview.tsx was being patched, but caused a compile error due to a bad paste / return outside function
-- replacement full IconButtonPreview.tsx was provided to restore compile
+Confirmed working:
+- fixed ESP32-P4 viewport alive
+- ForgeUI device config alive
+- absolute x/y positioning alive
+- inspector x/y/w/h editing alive
+- stable sizing helper alive
+- new widgets spawn at viewport-local drop position
+- new widgets spawn centered under cursor
+- addComponent accepts payload props
+- dropped widgets are born with positionMode/x/y/w/h
+- existing widgets can be dragged after placement
+- drag updates x/y
+- moved widgets stay where dropped
+- movement clamps to viewport bounds
+- clamp respects widget w/h
+- interaction ownership moved to ForgeUI wrapper layer
 
-Important confirmed architecture:
-The positioning concept works.
-The issue is not the core positioning helper.
-The issue is coverage across custom preview components.
-
-OpenChakra has two render categories:
-
-1. Standard preview paths:
-- PreviewContainer
-- WithChildrenPreviewContainer
-
-These can use ForgeUIPositionProps centrally.
-
-2. Custom preview paths:
-- ButtonPreview
-- AvatarPreview
-- IconButtonPreview
-- SelectPreview
-- NumberInputPreview
-- AccordionPreview
-- BreadcrumbPreview
-- etc
-
-These bypass the central wrappers and must be patched one by one if they are needed for embedded/HMI mode.
-
-Current truth:
-Some components work with positionMode="absolute".
-Some components do not yet work because they bypass ForgeUIPositionProps.
-
-Known behavior:
-- setting positionMode="absolute" with blank x/y/w/h can move components toward top-left
-- helper defaults reduce this but do not solve every custom preview case
-- complex Chakra widgets may clip, stretch, or behave oddly
-- broad random testing is no longer useful
-
-Correct next development rule:
-Do not test every component blindly.
-Patch and verify one preview file at a time.
-
-Recommended next priority:
-1. Restore/fix IconButtonPreview.tsx compile.
-2. Confirm app runs again.
-3. Test only one component after each file edit.
-4. Patch SelectPreview.tsx.
-5. Patch NumberInputPreview.tsx if not already confirmed.
-6. Patch AvatarPreview.tsx only if needed.
-7. Ignore complex grouped widgets for now.
-
-Core embedded test set:
-- Text
-- Badge
+Known working simple widgets:
 - Box
 - Button
-- IconButton
+- Badge
+- Input
 - Select
+
+Known later bucket:
 - NumberInput
+- IconButton
+- compound Chakra widgets
+- framework composition widgets
 
-Do NOT prioritise yet:
-- Accordion
-- Breadcrumb
-- Tabs
-- Stat
-- Skeleton
-- Highlight
-- AvatarGroup
+Files changed / involved:
+- src/components/editor/Editor.tsx
+- src/components/editor/PreviewContainer.tsx
+- src/components/editor/WithChildrenPreviewContainer.tsx
+- src/hooks/useDropComponent.ts
+- src/hooks/useInteractive.ts
+- src/core/models/components.ts
+- src/forgeui/ForgeUIPositionProps.ts
 
-Important lesson:
-From this point forward, patch custom preview files one at a time only.
-After each change:
-- save
-- let dev server rebuild
-- confirm compile
-- test that one component
-- then move to next
+Architecture truth:
+ForgeUI Studio has crossed from patched responsive editor into real embedded editor behaviour.
 
-Conclusion:
-ForgeUI Studio has now crossed from architecture discovery into preview coverage work. Position Layer V1 is viable, but not universal yet.
+Current proven flow:
+sidebar widget
+-> drag onto ESP32-P4 viewport
+-> widget spawns centered at drop point
+-> widget owns x/y/w/h
+-> widget can be selected
+-> inspector edits position and size
+-> widget can be dragged again
+-> movement persists
+-> movement is clamped inside the viewport
+
+Major architecture correction:
+Interaction ownership is now moving away from Chakra-rendered widgets and into ForgeUI-controlled wrapper layers.
+
+Wrapper layer will own:
+- drag
+- selection
+- hover
+- resize handles
+- overlays
+- snap guides
+- alignment helpers
+- future multi-select
+
+Current important realization:
+Most remaining problems are normalization/editor UX problems, not engine-failure problems.
+
+Correct next milestone:
+Resize handles V1.
+
+Resize direction:
+- use react-rnd
+- start with PreviewContainer only
+- simple widgets first
+- update w/h on resize
+- keep x/y stable
+- keep drag movement stable
+- do not touch LVGL export yet
+
+Correct next order:
+1. Resize handles V1
+2. Grid snap
+3. Better default widget sizes
+4. ForgeUI-safe widget set
+5. Save/load screen model
+6. LVGL export later
+
+Development rule:
+Do not rewrite the engine.
+Do not brute-force every Chakra widget.
+Keep movement, sizing, and interaction logic centralized.
+Build ForgeUI Studio as an embedded layer on top of the mature OpenChakra engine.
+
 ============================================================
+
+============================================================
+NEW SAVE POINT
+============================================================
+
+Save point:
+FORGEUI_STUDIO_RESIZE_HANDLES_V1_ALIVE__2026-05-20
+
+Meaning:
+ForgeUI Studio now has its first live resize-handle system working inside the embedded coordinate editor path using react-rnd wrapper ownership.
+
+Status:
+MAJOR BREAKTHROUGH / ALIVE
+
+Confirmed working:
+- react-rnd integrated successfully
+- wrapper-owned resize layer alive
+- bottom-right resize handle visible
+- resize persistence working through useForm/setValue
+- width/height persistence alive
+- child wrapper fill behavior alive
+- absolute positioning + resize coexist correctly
+- Rnd wrapper no longer conflicts with ForgeUI absolute positioning helper
+- resize now updates component props through official inspector update pipeline
+- no direct mutation of component.props required
+
+Important architecture correction:
+Resize ownership must belong to the wrapper interaction layer,
+NOT Chakra component internals.
+
+Current PreviewContainer architecture:
+- Rnd owns resize wrapper
+- ForgeUI wrapper owns interaction
+- Chakra component acts as render layer only
+
+Critical discovery:
+Some Chakra widgets obey wrapper sizing correctly,
+others require normalization rules.
+
+Current resize test status:
+
+Confirmed resizing correctly:
+- Badge
+- Code
+- Image
+
+Known normalization bucket:
+- Box
+- Avatar
+
+Likely cause:
+Certain Chakra components ignore wrapper dimensions or require explicit component-specific sizing behavior.
+
+Important conclusion:
+Resize engine itself is now proven alive.
+Remaining issues are component normalization problems,
+NOT resize-engine failures.
+
+Current temporary V1 rules:
+- resize wrapper first
+- simple widgets first
+- normalization later
+- do not brute-force every Chakra widget yet
+
+Key technical realization:
+The correct persistent update path is:
+
+useForm()
+->
+setValue(...)
+->
+existing inspector update pipeline
+
+NOT:
+direct mutation of component.props
+
+Critical correction made:
+forgeuiPositionProps() must NOT be applied to children when Rnd already owns positioning,
+otherwise double-position offset occurs.
+
+Correct future architecture:
+Wrapper layer owns:
+- drag
+- resize
+- selection
+- hover
+- bounds
+- alignment
+- snapping
+
+Child component owns:
+- visual rendering only
+
+Current important realization:
+ForgeUI Studio is no longer experimenting with embedded editing.
+
+It now has:
+- coordinate ownership
+- resize ownership
+- persistent editor state updates
+- interaction wrapper architecture
+
+This is now behaving like a real embedded editor foundation.
+
+Correct next direction:
+1. Continue widget normalization audit
+2. Test Button/Text/Input/Select/Heading
+3. Build component normalization layer
+4. Add grid snap later
+5. Add proper drag integration later
+6. Keep export deferred
+
+Do NOT:
+- rewrite the engine
+- force every Chakra component immediately
+- merge resize and drag too early
+- touch LVGL export yet
+
+Current assessment:
+ForgeUI Studio now has a believable path toward:
+- embedded HMI designer
+- ESP32-P4 UI tooling
+- future LVGL visual editor
+
+============================================================
+END SAVE UPDATE
+============================================================
+
 
 ============================================================
 POSITION LAYER INVESTIGATION UPDATE

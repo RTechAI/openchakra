@@ -1,5 +1,10 @@
 import React, { ReactNode, useCallback } from 'react'
-import { NumberInput, NumberInputProps } from '@chakra-ui/react'
+import {
+  NumberInput,
+  NumberInputProps,
+  NumberInputField,
+} from '@chakra-ui/react'
+
 import FormControl from './FormControl'
 import { useForm } from '~hooks/useForm'
 import usePropsSelector from '~hooks/usePropsSelector'
@@ -26,7 +31,14 @@ const NumberControl: React.FC<NumberControlPropsType> = ({
 
   return (
     <FormControl htmlFor={name} label={label}>
-      <NumberInput size="sm" value={value} onChange={onChange} {...props} />
+      <NumberInput
+        size="sm"
+        value={value || ''}
+        onChange={onChange}
+        {...props}
+      >
+        <NumberInputField id={name} />
+      </NumberInput>
     </FormControl>
   )
 }
