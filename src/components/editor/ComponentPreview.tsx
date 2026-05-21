@@ -47,26 +47,96 @@ const ComponentPreview: React.FC<{
 
   switch (type) {
     // Simple components
+    case 'Kbd':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Kbd
+      {...component.props}
+       w="100%"
+       h="100%"
+       minW="100%"
+       minH="100%"
+       display="flex"
+       alignItems="center"
+       justifyContent="center"
+       boxSizing="border-box"
+>
+  {component.props.children || 'shift'}
+</Chakra.Kbd>
+    </PreviewContainer>
+  )
+
+  case 'Radio':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Box
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap="10px"
+        color="white"
+      >
+        <Chakra.Radio {...component.props} />
+        <Chakra.Text color="white">
+          {component.props.children || 'Radio'}
+        </Chakra.Text>
+      </Chakra.Box>
+    </PreviewContainer>
+  )
+
+case 'Switch':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Switch
+        color="white"
+        w="100%"
+        h="100%"
+        minW="100%"
+        minH="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        boxSizing="border-box"
+      >
+        {component.props.children || 'Switch'}
+      </Chakra.Switch>
+    </PreviewContainer>
+  )
+  
     case 'Badge':
-    case 'Image':
-    case 'Text':
-    case 'Link':
+    // case 'Image':
+    // case 'Text':
+    // case 'Link':
     case 'Spinner':
-    case 'Checkbox':
-    case 'Textarea':
+    //case 'Checkbox':
+    // case 'Textarea':
     case 'CircularProgress':
     case 'Heading':
-    case 'Switch':
+    // case 'Switch':
     case 'FormLabel':
     case 'FormHelperText':
     case 'FormErrorMessage':
     case 'TabPanel':
     case 'Tab':
-    case 'Input':
-    case 'Radio':
+    //case 'Input':
+    //case 'Radio':
     case 'ListItem':
     case 'BreadcrumbLink':
-    case 'Kbd':
+    // case 'Kbd':
     case 'StatLabel':
     case 'StatNumber':
     case 'StatArrow':
@@ -80,7 +150,7 @@ const ComponentPreview: React.FC<{
     // Wrapped functional components (forward ref issue)
     case 'AlertIcon':
     case 'Progress':
-    case 'CloseButton':
+    // case 'CloseButton':
     case 'AccordionIcon':
     case 'Code':
     case 'ListIcon':
@@ -99,7 +169,7 @@ const ComponentPreview: React.FC<{
         />
       )
     // Components with childrens
-    case 'Box':
+    // case 'Box':
     case 'SimpleGrid':
     case 'Flex':
     case 'FormControl':
@@ -131,46 +201,302 @@ const ComponentPreview: React.FC<{
         />
       )
     // More complex components
-    case 'InputRightElement':
-      return <InputRightElementPreview component={component} />
-    case 'InputLeftElement':
-      return <InputLeftElementPreview component={component} />
-    case 'Avatar':
-      return <AvatarPreview component={component} />
-    case 'AvatarBadge':
-      return <AvatarBadgePreview component={component} />
-    case 'AvatarGroup':
-      return <AvatarGroupPreview component={component} />
-    case 'Alert':
-      return <AlertPreview component={component} />
-    case 'Accordion':
-      return <AccordionPreview component={component} />
-    case 'AccordionButton':
-      return <AccordionButtonPreview component={component} />
-    case 'AccordionItem':
-      return <AccordionItemPreview component={component} />
-    case 'AccordionPanel':
-      return <AccordionPanelPreview component={component} />
-    case 'AspectRatio':
-      return <AspectRatioPreview component={component} />
-    case 'Button':
-      return <ButtonPreview component={component} />
+case 'InputRightElement':
+  return <InputRightElementPreview component={component} />
+
+case 'InputLeftElement':
+  return <InputLeftElementPreview component={component} />
+
+case 'Avatar':
+  return <AvatarPreview component={component} />
+
+case 'AvatarBadge':
+  return <AvatarBadgePreview component={component} />
+
+case 'AvatarGroup':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <AvatarGroupPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'Alert':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <AlertPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'Accordion':
+  return <AccordionPreview component={component} />
+
+case 'AccordionButton':
+  return <AccordionButtonPreview component={component} />
+
+case 'AccordionItem':
+  return <AccordionItemPreview component={component} />
+
+case 'AccordionPanel':
+  return <AccordionPanelPreview component={component} />
+
+case 'AspectRatio':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <AspectRatioPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'Button':
+  return (
+    <PreviewContainer
+      component={component}
+      {...forwardedProps}
+    >
+      <ButtonPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'CloseButton':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+    <Chakra.CloseButton
+  {...component.props}
+  width="100%"
+  height="100%"
+  fontSize="48px"
+/>
+    </PreviewContainer>
+  )
+
+
     case 'Breadcrumb':
       return <BreadcrumbPreview component={component} />
     case 'BreadcrumbItem':
       return <BreadcrumbItemPreview component={component} />
-    case 'Icon':
-      return <IconPreview component={component} />
+    
+      case 'Icon':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <IconPreview component={component} />
+    </PreviewContainer>
+  )
+  
     case 'IconButton':
-      return <IconButtonPreview component={component} />
-    case 'Select':
-      return <SelectPreview component={component} />
-    case 'NumberInput':
-      return <NumberInputPreview component={component} />
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <IconButtonPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'Select':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Box
+        width="100%"
+        height="100%"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        gap="6px"
+      >
+        <Chakra.Text color="white" fontSize="sm">
+          Select
+        </Chakra.Text>
+
+        <Chakra.Select
+          {...component.props}
+          width="100%"
+          color="white"
+          bg="transparent"
+          borderColor="gray.500"
+        >
+          <option>Option 1</option>
+          <option>Option 2</option>
+          <option>Option 3</option>
+        </Chakra.Select>
+      </Chakra.Box>
+    </PreviewContainer>
+  )
+
+  case 'Input':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Input
+        {...component.props}
+        width="100%"
+        height="100%"
+        placeholder="Input value"
+      />
+    </PreviewContainer>
+  )
+
+  case 'Box':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Box
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        border="1px dashed #666"
+        color="gray.400"
+        fontSize="sm"
+      >
+        Box
+      </Chakra.Box>
+    </PreviewContainer>
+  )
+  
+case 'Image':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Box
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        border="1px dashed #666"
+        color="gray.400"
+        fontSize="sm"
+      >
+        Image
+      </Chakra.Box>
+    </PreviewContainer>
+  )
+
+  case 'Checkbox':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Checkbox
+        {...component.props}
+        color="white"
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {component.props.children || 'Checkbox'}
+      </Chakra.Checkbox>
+    </PreviewContainer>
+  )
+
+case 'Textarea':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Textarea
+        {...component.props}
+        width="100%"
+        height="100%"
+        placeholder="Textarea value"
+      />
+    </PreviewContainer>
+  )
+
+  case 'Text':
+    return (
+      <PreviewContainer
+        component={component}
+        enableVisualHelper
+        {...forwardedProps}
+    >
+      <Chakra.Text
+        {...component.props}
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        color="white"
+      >
+        {component.props.children || 'Text'}
+      </Chakra.Text>
+    </PreviewContainer>
+  )
+
+
+case 'Link':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <Chakra.Link
+        {...component.props}
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      />
+    </PreviewContainer>
+  )
+  
     case 'Highlight':
       return <HighlightPreview component={component} />
+
     case 'Skeleton':
-      return <SkeletonPreview component={component} />
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <SkeletonPreview component={component} />
+    </PreviewContainer>
+  )
+
     case 'SkeletonText':
       return <SkeletonTextPreview component={component} />
     case 'SkeletonCircle':

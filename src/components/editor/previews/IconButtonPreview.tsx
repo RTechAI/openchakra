@@ -1,45 +1,35 @@
 import React from 'react'
-import { useDropComponent } from '~hooks/useDropComponent'
-import { useInteractive } from '~hooks/useInteractive'
 import icons from '~iconsList'
 import { IconButton } from '@chakra-ui/react'
-import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface Props {
   component: IComponent
 }
 
 const IconButtonPreview = ({ component }: Props) => {
-  const { isOver } = useDropComponent(component.id)
-  const {
-    props: { icon, ...props },
-    ref,
-  } = useInteractive(component, true)
+  const { icon, ...props } = { ...component.props }
 
-  if (isOver) {
-    props.bg = 'teal.50'
-  }
-  
-// IconButton: positioning OK, icon render unresolved
+  if (icon && Object.keys(icons).includes(icon)) {
+    const Icon = icons[icon as keyof typeof icons]
 
-  if (icon) {
-    if (Object.keys(icons).includes(icon)) {
-      const Icon = icons[icon as keyof typeof icons]
-
-      return (
-        <IconButton
-          ref={ref}
-          icon={<Icon path="" />}
-          {...props}
-          {...forgeuiPositionProps(props)}
-        />
-      )
-    }
-
-    return null
+    return (
+      <IconButton
+        icon={<Icon path="" />}
+        {...props}
+        width="100%"
+        height="100%"
+      />
+    )
   }
 
-  return null
+  return (
+    <IconButton
+      aria-label="Icon button"
+      {...props}
+      width="100%"
+      height="100%"
+    />
+  )
 }
 
 export default IconButtonPreview

@@ -26,237 +26,537 @@ P4 fixed-device viewport architecture proven.
 Editor engine mapped far enough to plan embedded/HMI mode safely.
 
 ============================================================
-CURRENT SAVE POINT
+NEW SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_RESIZE_LAYER_PREP__WRAPPER_OWNERSHIP_ALIGNED__2026-05-20
+FORGEUI_STUDIO_SPECIAL_PREVIEW_NORMALIZATION_WAVE1__WRAPPER_ARCH_PROVEN__2026-05-21
 
 Meaning:
-ForgeUI Studio has moved beyond manual embedded positioning and now has a true coordinate-based editor foundation alive inside OpenChakra.
+ForgeUI Studio has now successfully proven the wrapper-owned special preview normalization architecture across multiple component families inside the modified OpenChakra engine.
+
+This marks the transition from:
+- isolated resize hacks
+
+to:
+- a repeatable renderer ownership model.
+
+The architecture direction is now confirmed as viable.
 
 Status:
-MAJOR BREAKTHROUGH / ALIVE
-
-Confirmed working:
-- fixed ESP32-P4 viewport alive
-- ForgeUI device config alive
-- absolute x/y positioning alive
-- inspector x/y/w/h editing alive
-- stable sizing helper alive
-- new widgets spawn at viewport-local drop position
-- new widgets spawn centered under cursor
-- addComponent accepts payload props
-- dropped widgets are born with positionMode/x/y/w/h
-- existing widgets can be dragged after placement
-- drag updates x/y
-- moved widgets stay where dropped
-- movement clamps to viewport bounds
-- clamp respects widget w/h
-- interaction ownership moved to ForgeUI wrapper layer
-
-Known working simple widgets:
-- Box
-- Button
-- Badge
-- Input
-- Select
-
-Known later bucket:
-- NumberInput
-- IconButton
-- compound Chakra widgets
-- framework composition widgets
-
-Files changed / involved:
-- src/components/editor/Editor.tsx
-- src/components/editor/PreviewContainer.tsx
-- src/components/editor/WithChildrenPreviewContainer.tsx
-- src/hooks/useDropComponent.ts
-- src/hooks/useInteractive.ts
-- src/core/models/components.ts
-- src/forgeui/ForgeUIPositionProps.ts
-
-Architecture truth:
-ForgeUI Studio has crossed from patched responsive editor into real embedded editor behaviour.
-
-Current proven flow:
-sidebar widget
--> drag onto ESP32-P4 viewport
--> widget spawns centered at drop point
--> widget owns x/y/w/h
--> widget can be selected
--> inspector edits position and size
--> widget can be dragged again
--> movement persists
--> movement is clamped inside the viewport
-
-Major architecture correction:
-Interaction ownership is now moving away from Chakra-rendered widgets and into ForgeUI-controlled wrapper layers.
-
-Wrapper layer will own:
-- drag
-- selection
-- hover
-- resize handles
-- overlays
-- snap guides
-- alignment helpers
-- future multi-select
-
-Current important realization:
-Most remaining problems are normalization/editor UX problems, not engine-failure problems.
-
-Correct next milestone:
-Resize handles V1.
-
-Resize direction:
-- use react-rnd
-- start with PreviewContainer only
-- simple widgets first
-- update w/h on resize
-- keep x/y stable
-- keep drag movement stable
-- do not touch LVGL export yet
-
-Correct next order:
-1. Resize handles V1
-2. Grid snap
-3. Better default widget sizes
-4. ForgeUI-safe widget set
-5. Save/load screen model
-6. LVGL export later
-
-Development rule:
-Do not rewrite the engine.
-Do not brute-force every Chakra widget.
-Keep movement, sizing, and interaction logic centralized.
-Build ForgeUI Studio as an embedded layer on top of the mature OpenChakra engine.
+MAJOR ARCHITECTURE BREAKTHROUGH / SAVE NOW
 
 ============================================================
+MAJOR ARCHITECTURE TRUTH PROVEN
+============================================================
+
+Correct ownership model:
+
+ComponentPreview
+->
+PreviewContainer / WithChildrenPreviewContainer
+->
+special preview content
+
+PreviewContainer owns:
+- resize
+- resize handles
+- helper border
+- selection
+- hover state
+- geometry
+- wrapper sizing
+- react-rnd integration
+- position persistence
+- width/height persistence
+
+Special preview files own:
+- visual rendering only
+- component-specific display logic only
+- optional child/drop behavior only
+
+Special preview files should NOT own:
+- useInteractive()
+- geometry
+- positioning
+- resize
+- helper border
+- wrapper sizing
+- forgeuiPositionProps()
+
+============================================================
+MAJOR DISCOVERY
+============================================================
+
+The primary source of broken behavior was NOT:
+- OpenChakra core
+- Redux
+- drag/drop engine
+- PreviewContainer
+- react-rnd
+
+The real issue source was:
+
+OLD SPECIAL PREVIEW BYPASS ARCHITECTURE
+
+Symptoms identified repeatedly:
+- stuck top-left
+- helper border detached
+- resize handle detached
+- full-width stretch
+- intrinsic inline collapse
+- clipping
+- resize ignored
+
+Cause:
+special preview files owning geometry internally instead of allowing PreviewContainer to own it.
+
+============================================================
+CURRENT KNOWN-GOOD NORMALIZED COMPONENTS
+============================================================
+
+Confirmed working:
+- Button
+- CloseButton
+- IconButton
+- Icon
+- Link
+- Alert
+- AspectRatio
+- AvatarGroup
+- Badge
+- Box
+- Center
+- Container
+- FormControl (raw component)
+- Avatar (acceptable baseline)
+- Select (acceptable baseline)
+- Kbd
+- Radio
+- Switch
+- multiple intrinsic Chakra controls now normalized successfully
+
+Additional proven architecture truth:
+Many Chakra primitives previously treated as "simple components"
+were actually intrinsic inline renderers that bypassed proper
+wrapper-owned geometry behavior.
+
+The correct normalization pattern is now proven:
+
+- remove component from raw/simple bucket
+- move component into explicit normalized case
+- wrap using PreviewContainer
+- force width/height ownership at wrapper layer
+- force full-size render behavior in preview layer
+- render children explicitly when required
+
+This pattern is now considered:
+SAFE / REPEATABLE / PROVEN
+
+============================================================
+CURRENT DEFERRED COMPOUND/PRESET CLEANUP BUCKET
+============================================================
+
+Intentionally deferred:
+- Breadcrumb preset
+- Accordion preset family
+- Tabs preset family
+- FormControl preset
+- Highlight
+- Alert child helpers
+- AvatarBadge
+- FormHelperText
+- FormErrorMessage
+
+Important:
+Many of these are:
+- compound-slot components
+- child-only helpers
+- intrinsic inline controls
+- preset composition layouts
+
+These are NOT core architecture failures anymore.
+
+============================================================
+IMPORTANT CLASSIFICATION DISCOVERY
+============================================================
+
+ForgeUI Studio components now clearly separate into categories:
+
+------------------------------------------------------------
+CATEGORY 1 — Stable Wrapper Components
+------------------------------------------------------------
+
+Examples:
+- Button
+- Badge
+- Box
+- Center
+- Container
+
+These already behave correctly using:
+- PreviewContainer
+- WithChildrenPreviewContainer
+
+------------------------------------------------------------
+CATEGORY 2 — Old Special Preview Bypass Components
+------------------------------------------------------------
+
+Examples:
+- Alert
+- AspectRatio
+- Icon
+- AvatarGroup
+- Link
+
+These required normalization.
+
+Pattern now proven:
+- wrap in PreviewContainer
+- remove useInteractive from preview
+- remove internal geometry ownership
+- force width/height 100%
+- content-only preview rendering
+
+------------------------------------------------------------
+CATEGORY 3 — Tiny Inline Visual Components
+------------------------------------------------------------
+
+Examples:
+- Checkbox
+- FormLabel
+- Spinner
+- CircularProgress
+
+These are visually small relative to wrapper size.
+
+This is now considered:
+- visual scaling behavior
+
+NOT:
+- architecture failure
+
+------------------------------------------------------------
+CATEGORY 4 — Compound/Preset Layout Systems
+------------------------------------------------------------
+
+Examples:
+- Breadcrumb
+- Accordion
+- Tabs
+- FormControl preset
+
+These are multi-component layout systems and will need a later dedicated preset/layout architecture pass.
+
+============================================================
+CURRENT ACTIVE ARCHITECTURE
+============================================================
+
+ComponentPreview
+->
+PreviewContainer / WithChildrenPreviewContainer
+->
+special preview renderer
+
+NOT:
+
+special preview
+->
+own geometry
+->
+own resize
+->
+own wrapper
+
+============================================================
+CURRENT IMPORTANT RUNTIME FILES
+============================================================
+
+Core geometry owner:
+- PreviewContainer.tsx
+
+Owns:
+- react-rnd
+- geometry
+- resize persistence
+- helper border
+- wrapper sizing
+
+Complex child wrapper:
+- WithChildrenPreviewContainer.tsx
+
+Owns:
+- child-capable layouts
+- nested drop regions
+
+Renderer router:
+- ComponentPreview.tsx
+
+Now becoming:
+- renderer ownership switchboard
+- normalization routing layer
+
+============================================================
+CURRENT STABLE ABSOLUTE POSITIONING TRUTH
+============================================================
+
+Absolute positioning system remains alive and proven.
+
+Current runtime path:
+- x/y/w/h props alive
+- react-rnd alive
+- inspector updates alive
+- wrapper persistence alive
+
+Current architecture remains:
+- embedded coordinate-based workflow
+- fixed-device viewport workflow
 
 ============================================================
 NEW SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_RESIZE_HANDLES_V1_ALIVE__2026-05-20
+FORGEUI_STUDIO_NORMALIZATION_WAVE1_90_PERCENT__INTRINSIC_CHAKRA_PATTERN_PROVEN__2026-05-21
 
 Meaning:
-ForgeUI Studio now has its first live resize-handle system working inside the embedded coordinate editor path using react-rnd wrapper ownership.
+ForgeUI Studio has now successfully proven the intrinsic Chakra normalization architecture across the primary ForgeUI Core widget set.
+
+This marks the transition from:
+- unstable mixed Chakra behavior
+- invisible intrinsic controls
+- detached helper borders
+- wrapper inconsistency
+
+to:
+- a repeatable normalized embedded preview model.
+
+The ForgeUI Core widget layer is now visibly alive and usable.
 
 Status:
-MAJOR BREAKTHROUGH / ALIVE
+MAJOR NORMALIZATION BREAKTHROUGH / SAVE NOW
 
-Confirmed working:
-- react-rnd integrated successfully
-- wrapper-owned resize layer alive
-- bottom-right resize handle visible
-- resize persistence working through useForm/setValue
-- width/height persistence alive
-- child wrapper fill behavior alive
-- absolute positioning + resize coexist correctly
-- Rnd wrapper no longer conflicts with ForgeUI absolute positioning helper
-- resize now updates component props through official inspector update pipeline
-- no direct mutation of component.props required
+============================================================
+NEW MAJOR ARCHITECTURE TRUTH
+============================================================
 
-Important architecture correction:
-Resize ownership must belong to the wrapper interaction layer,
-NOT Chakra component internals.
+The correct embedded-editor rendering model is now confirmed as:
 
-Current PreviewContainer architecture:
-- Rnd owns resize wrapper
-- ForgeUI wrapper owns interaction
-- Chakra component acts as render layer only
-
-Critical discovery:
-Some Chakra widgets obey wrapper sizing correctly,
-others require normalization rules.
-
-Current resize test status:
-
-Confirmed resizing correctly:
-- Badge
-- Code
-- Image
-
-Known normalization bucket:
-- Box
-- Avatar
-
-Likely cause:
-Certain Chakra components ignore wrapper dimensions or require explicit component-specific sizing behavior.
-
-Important conclusion:
-Resize engine itself is now proven alive.
-Remaining issues are component normalization problems,
-NOT resize-engine failures.
-
-Current temporary V1 rules:
-- resize wrapper first
-- simple widgets first
-- normalization later
-- do not brute-force every Chakra widget yet
-
-Key technical realization:
-The correct persistent update path is:
-
-useForm()
+PreviewContainer
 ->
-setValue(...)
+normalized intrinsic preview
 ->
-existing inspector update pipeline
+visible editor-safe visual state
 
 NOT:
-direct mutation of component.props
 
-Critical correction made:
-forgeuiPositionProps() must NOT be applied to children when Rnd already owns positioning,
-otherwise double-position offset occurs.
+raw Chakra intrinsic renderer
+->
+browser-default inline rendering
+->
+invisible editor behavior
 
-Correct future architecture:
-Wrapper layer owns:
-- drag
+============================================================
+NEW PROVEN NORMALIZATION PATTERN
+============================================================
+
+Proven safe normalization pattern:
+
+1.
+Remove component from generic/simple intrinsic bucket.
+
+2.
+Create explicit standalone case in ComponentPreview.tsx.
+
+3.
+Wrap component using PreviewContainer.
+
+4.
+Force wrapper ownership:
 - resize
+- geometry
+- helper border
 - selection
 - hover
-- bounds
-- alignment
-- snapping
 
-Child component owns:
-- visual rendering only
+5.
+Force preview ownership:
+- visible rendering
+- full-size fill behavior
+- explicit labels/placeholders
+- embedded-editor-safe visuals
 
-Current important realization:
-ForgeUI Studio is no longer experimenting with embedded editing.
+============================================================
+CURRENT KNOWN-GOOD NORMALIZED CORE WIDGETS
+============================================================
 
-It now has:
-- coordinate ownership
-- resize ownership
-- persistent editor state updates
-- interaction wrapper architecture
+Confirmed alive and normalized:
 
-This is now behaving like a real embedded editor foundation.
+- Button
+- Text
+- Input
+- Textarea
+- Switch
+- Checkbox
+- Radio
+- Select
+- Image
+- Box
+- CloseButton
+- IconButton
+- Icon
+- Link
+- Alert
+- AspectRatio
+- AvatarGroup
+- Badge
+- Kbd
 
-Correct next direction:
-1. Continue widget normalization audit
-2. Test Button/Text/Input/Select/Heading
-3. Build component normalization layer
-4. Add grid snap later
-5. Add proper drag integration later
-6. Keep export deferred
+============================================================
+NEW IMPORTANT DISCOVERY
+============================================================
 
-Do NOT:
-- rewrite the engine
-- force every Chakra component immediately
-- merge resize and drag too early
-- touch LVGL export yet
+Many Chakra components previously assumed to be:
+- "simple components"
 
-Current assessment:
-ForgeUI Studio now has a believable path toward:
-- embedded HMI designer
-- ESP32-P4 UI tooling
-- future LVGL visual editor
+were actually:
+
+- intrinsic inline renderers
+- browser-native controls
+- wrapper-hostile controls
+- invisible-by-default editor components
+
+The issue source was NOT:
+- Redux
+- react-rnd
+- PreviewContainer
+- drag/drop
+- geometry persistence
+
+The issue source was:
+RAW INTRINSIC CHAKRA RENDERING INSIDE AN EMBEDDED EDITOR CONTEXT
+
+============================================================
+NEW FORGEUI CORE SIDEBAR LAYER
+============================================================
+
+Sidebar architecture is now split into:
+
+ForgeUI Core
+- curated supported widgets
+- normalized editor-safe widgets
+- future export-safe widgets
+
+Future:
+Advanced Chakra
+- experimental/raw widgets
+- non-normalized widgets
+- lower-priority compatibility bucket
+
+This is the first major step away from:
+- OpenChakra generic component chaos
+
+toward:
+- ForgeUI Studio product identity
+
+============================================================
+NEW VISUAL PREVIEW RULE
+============================================================
+
+Editor previews should prefer:
+- visible labels
+- visible placeholders
+- centered preview content
+- obvious editor-safe visuals
+
+Examples:
+- Input -> "Input value"
+- Textarea -> "Textarea value"
+- Image -> "Image"
+- Box -> "Box"
+- Select -> explicit label + visible options
+
+Reason:
+ForgeUI Studio is an embedded/HMI editor,
+not a browser DOM inspector.
+
+============================================================
+CURRENT KNOWN PAIN POINT
+============================================================
+
+Select controls remain partially awkward due to:
+- native browser rendering
+- popup ownership
+- intrinsic sizing behavior
+- focus stealing
+- browser dropdown implementation
+
+Current Select behavior is considered:
+ACCEPTABLE V1
+
+Do not burn major architecture time on Select polish yet.
+
+============================================================
+CURRENT IMPORTANT FILE TRUTH
+============================================================
+
+ComponentPreview.tsx is now evolving into:
+
+- renderer ownership switchboard
+- normalization routing layer
+- editor-safe intrinsic renderer layer
+
+It is no longer:
+- simple Chakra passthrough routing only
+
+============================================================
+CURRENT SAFE NEXT TARGETS
+============================================================
+
+Best next candidates:
+
+1.
+NumberInput normalization
+
+2.
+helper border polish
+
+3.
+ForgeUI Core visual consistency
+
+4.
+future Advanced Chakra bucket
+
+5.
+grid snap investigation
+
+NOT YET:
+- LVGL export
+- engine rewrite
+- drag coordinate rewrite
+- Redux rewrite
+- advanced preset normalization
+
+============================================================
+CURRENT ASSESSMENT
+============================================================
+
+ForgeUI Studio is now visibly transitioning from:
+
+generic modified OpenChakra
+
+into:
+
+a real embedded/HMI visual editor.
+
+The normalization architecture is now:
+- repeatable
+- teachable
+- scalable
+- maintainable
+- fast to extend
+
+OpenChakra adaptation path remains fully validated.
 
 ============================================================
 END SAVE UPDATE

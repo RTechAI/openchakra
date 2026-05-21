@@ -47,28 +47,26 @@ const AvatarPreview: React.FC<IPreviewProps & {
 }
 
 export const AvatarGroupPreview = ({ component }: IPreviewProps) => {
-  const { props, ref } = useInteractive(component, true)
   const { drop, isOver } = useDropComponent(component.id, ['Avatar'])
   const components = useSelector(getComponents)
-  let boxProps: any = { display: 'inline' }
-
-  if (isOver) {
-    props.bg = 'teal.50'
-  }
 
   return (
-    <Box ref={drop(ref)} {...boxProps}>
-      <AvatarGroup {...props}>
-        {component.children.map((key: string, i: number) => (
-          <AvatarPreview
-            key={key}
-            index={i + 1}
-            spacing={props.spacing}
-            component={components[key]}
-          />
-        ))}
-      </AvatarGroup>
-    </Box>
+    <AvatarGroup
+      ref={drop}
+      {...component.props}
+      width="100%"
+      height="100%"
+      bg={isOver ? 'teal.50' : component.props?.bg}
+    >
+      {component.children.map((key: string, i: number) => (
+        <AvatarPreview
+          key={key}
+          index={i + 1}
+          spacing={component.props.spacing}
+          component={components[key]}
+        />
+      ))}
+    </AvatarGroup>
   )
 }
 

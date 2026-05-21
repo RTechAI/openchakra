@@ -6,11 +6,14 @@ import {
   InputRightElement,
   DarkMode,
   IconButton,
-  Flex,
 } from '@chakra-ui/react'
+
 import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
+
 import DragItem from './DragItem'
+
 import { menuItems, MenuItem } from '~componentsList'
+import { forgeuiCoreWidgets } from '~forgeui/ForgeUIWidgetSet'
 
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -29,7 +32,14 @@ const Menu = () => {
         backgroundColor="#2e3748"
         width="15rem"
       >
-        <Box p={5} pb={1} position="sticky" w="100%" bgColor="#2e3748" top={0}>
+        <Box
+          p={5}
+          pb={1}
+          position="sticky"
+          w="100%"
+          bgColor="#2e3748"
+          top={0}
+        >
           <InputGroup size="sm" mb={4}>
             <Input
               value={searchTerm}
@@ -45,6 +55,7 @@ const Menu = () => {
               }}
               zIndex={0}
             />
+
             <InputRightElement zIndex={1}>
               {searchTerm ? (
                 <IconButton
@@ -60,25 +71,45 @@ const Menu = () => {
             </InputRightElement>
           </InputGroup>
         </Box>
+
         <Box p={5} pt={0}>
-          {(Object.keys(menuItems) as ComponentType[])
-            .filter(c => c.toLowerCase().includes(searchTerm.toLowerCase()))
+          {[
+            ...forgeuiCoreWidgets.filter(
+              name => menuItems[name as ComponentType]
+            ),
+
+            ...(Object.keys(menuItems) as ComponentType[]).filter(
+              c => !forgeuiCoreWidgets.includes(c)
+            ),
+          ]
+            .filter(c =>
+              c.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+
             .map(name => {
-              const { children, soon } = menuItems[name] as MenuItem
+              const isForgeUIStart =
+                name === forgeuiCoreWidgets[0]
+
+              const { children, soon } =
+                menuItems[name] as MenuItem
 
               if (children) {
-                const elements = Object.keys(children).map(childName => (
-                  <DragItem
-                    isChild
-                    key={childName}
-                    label={childName}
-                    type={childName as any}
-                    id={childName as any}
-                    rootParentType={menuItems[name]?.rootParentType || name}
-                  >
-                    {childName}
-                  </DragItem>
-                ))
+                const elements = Object.keys(children).map(
+                  childName => (
+                    <DragItem
+                      isChild
+                      key={childName}
+                      label={childName}
+                      type={childName as any}
+                      id={childName as any}
+                      rootParentType={
+                        menuItems[name]?.rootParentType || name
+                      }
+                    >
+                      {childName}
+                    </DragItem>
+                  )
+                )
 
                 return [
                   <DragItem
@@ -88,11 +119,43 @@ const Menu = () => {
                     label={name}
                     type={`${name}Meta` as any}
                     id={`${name}Meta` as any}
-                    rootParentType={menuItems[name]?.rootParentType || name}
+                    rootParentType={
+                      menuItems[name]?.rootParentType || name
+                    }
                   >
                     {name}
                   </DragItem>,
+
                   ...elements,
+                ]
+              }
+
+              if (isForgeUIStart) {
+                return [
+                  <Box
+                    key="forgeui-core-title"
+                    color="cyan.300"
+                    fontSize="xs"
+                    fontWeight="bold"
+                    mt={2}
+                    mb={2}
+                    textTransform="uppercase"
+                  >
+                    ForgeUI Core
+                  </Box>,
+
+                  <DragItem
+                    soon={soon}
+                    key={name}
+                    label={name}
+                    type={name as any}
+                    id={name as any}
+                    rootParentType={
+                      menuItems[name]?.rootParentType || name
+                    }
+                  >
+                    {name}
+                  </DragItem>,
                 ]
               }
 
@@ -103,7 +166,9 @@ const Menu = () => {
                   label={name}
                   type={name as any}
                   id={name as any}
-                  rootParentType={menuItems[name]?.rootParentType || name}
+                  rootParentType={
+                    menuItems[name]?.rootParentType || name
+                  }
                 >
                   {name}
                 </DragItem>

@@ -1,21 +1,13 @@
 import React from 'react'
-import { useDropComponent } from '~hooks/useDropComponent'
-import { useInteractive } from '~hooks/useInteractive'
 import { Button } from '@chakra-ui/react'
 import icons from '~iconsList'
-import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface Props {
   component: IComponent
 }
 
 const ButtonPreview = ({ component }: Props) => {
-  const { isOver } = useDropComponent(component.id)
-  const { props, ref } = useInteractive(component, true)
-
-  if (isOver) {
-    props.bg = 'teal.50'
-  }
+  const props = { ...component.props }
 
   if (props.leftIcon) {
     if (Object.keys(icons).includes(props.leftIcon)) {
@@ -36,12 +28,12 @@ const ButtonPreview = ({ component }: Props) => {
   }
 
   return (
-  <Button
-    ref={ref}
-    {...props}
-    {...forgeuiPositionProps(props)}
-  />
-)
+    <Button
+      {...props}
+      width="100%"
+      height="100%"
+    />
+  )
 }
 
 export default ButtonPreview

@@ -3,22 +3,24 @@ import { useInteractive } from '~hooks/useInteractive'
 import { Box } from '@chakra-ui/react'
 import { Rnd } from 'react-rnd'
 import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
-import { useForm } from '~hooks/useForm'
+import useDispatch from '~hooks/useDispatch'
 
 const PreviewContainer: React.FC<{
   component: IComponent
-  type: string | FunctionComponent<any> | ComponentClass<any, any>
+  type?: string | FunctionComponent<any> | ComponentClass<any, any>
+  children?: React.ReactNode
   enableVisualHelper?: boolean
   isBoxWrapped?: boolean
 }> = ({
   component,
   type,
+  children: customChildren,
   enableVisualHelper,
   isBoxWrapped,
   ...forwardedProps
 }) => {
   const { props, ref } = useInteractive(component, enableVisualHelper)
-  const { setValue } = useForm()
+  const dispatch = useDispatch()
 
   const childProps =
     props.positionMode === 'absolute'
@@ -36,7 +38,19 @@ const PreviewContainer: React.FC<{
           ...forgeuiPositionProps(props),
         }
 
-  const children = React.createElement(type, childProps)
+  const children = customChildren ? (
+  <Box
+    width="100%"
+    height="100%"
+    display="flex"
+    alignItems="stretch"
+    justifyContent="stretch"
+  >
+    {customChildren}
+  </Box>
+) : type ? (
+  React.createElement(type, childProps)
+) : null
 
   if (props.positionMode === 'absolute') {
     return (
@@ -53,34 +67,70 @@ const PreviewContainer: React.FC<{
         disableDragging={true}
         enableResizing={true}
         resizeHandleStyles={{
-          bottomRight: {
-            width: '14px',
-            height: '14px',
-            right: '0px',
-            bottom: '0px',
-            background: '#38bdf8',
-            zIndex: 9999,
-          },
-        }}
+  bottomRight: {
+    width: '18px',
+    height: '18px',
+    right: '-9px',
+    bottom: '-9px',
+    background: '#38bdf8',
+    border: '2px solid #ffffff',
+    boxShadow: '0 0 0 1px #0f172a, 0 0 8px #38bdf8',
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    zIndex: 99999,
+  },
+}}
         style={{
-          border: enableVisualHelper ? '1px dashed #38bdf8' : 'none',
-        }}
+        border: enableVisualHelper ? '2px solid #67e8f9' : 'none',
+        boxSizing: 'border-box',
+}}
         onResizeStop={(_, __, element, ___, position) => {
-          setValue('w', parseInt(element.style.width, 10))
-          setValue('h', parseInt(element.style.height, 10))
-          setValue('x', position.x)
-          setValue('y', position.y)
+          dispatch.components.updateProps({
+            id: component.id,
+            name: 'w',
+            value: parseInt(element.style.width, 10),
+          })
+
+          dispatch.components.updateProps({
+            id: component.id,
+            name: 'h',
+            value: parseInt(element.style.height, 10),
+          })
+
+          dispatch.components.updateProps({
+            id: component.id,
+            name: 'x',
+            value: position.x,
+          })
+
+          dispatch.components.updateProps({
+            id: component.id,
+            name: 'y',
+            value: position.y,
+          })
         }}
       >
-        <Box ref={ref} position="relative" width="100%" height="100%">
+        <Box
+          ref={ref}
+          position="relative"
+          width="100%"
+          height="100%"
+          overflow="visible"
+        >
           {children}
         </Box>
       </Rnd>
     )
   }
 
-  return (
-    <Box ref={ref} position="relative">
+     return (
+    <Box
+      ref={ref}
+      position="relative"
+      width="100%"
+      height="100%"
+      overflow="visible"
+    >
       {children}
     </Box>
   )

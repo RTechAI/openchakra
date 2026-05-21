@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDropComponent } from '~hooks/useDropComponent'
-import { useInteractive } from '~hooks/useInteractive'
 import icons from '~iconsList'
 import { Box } from '@chakra-ui/react'
 
@@ -10,27 +9,32 @@ interface Props {
 
 const IconPreview = ({ component }: Props) => {
   const { isOver } = useDropComponent(component.id)
-  const {
-    props: { color, boxSize, icon, ...props },
-  } = useInteractive(component, true)
 
-  if (isOver) {
-    props.bg = 'teal.50'
-  }
+  const { color, boxSize, icon, ...props } = component.props || {}
 
-  if (icon) {
-    if (Object.keys(icons).includes(icon)) {
-      const Icon = icons[icon as keyof typeof icons]
-      return (
-        <Box {...props} display="inline">
-          <Icon path="" color={color} boxSize={boxSize} />
-        </Box>
-      )
-    }
+  if (!icon || !Object.keys(icons).includes(icon)) {
     return null
   }
 
-  return null
+  const Icon = icons[icon as keyof typeof icons]
+
+  return (
+    <Box
+      {...props}
+      width="100%"
+      height="100%"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bg={isOver ? 'teal.50' : props.bg}
+    >
+      <Icon
+        path=""
+        color={color}
+        boxSize={boxSize || '60%'}
+      />
+    </Box>
+  )
 }
 
 export default IconPreview

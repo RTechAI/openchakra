@@ -1,30 +1,29 @@
 import React, { useMemo } from 'react'
-import { useInteractive } from '~hooks/useInteractive'
 import iconsList from '~iconsList'
 import { Select } from '@chakra-ui/react'
-import { forgeuiPositionProps } from '~forgeui/ForgeUIPositionProps'
 
 interface IProps {
   component: IComponent
 }
 
 const SelectPreview = ({ component }: IProps) => {
-  const {
-    props: { icon, ...props },
-  } = useInteractive(component)
+  const { icon, ...props } = { ...component.props }
+
   const Icon = useMemo(() => {
     if (!icon) {
       return null
     }
+
     return iconsList[icon as keyof typeof iconsList]
   }, [icon])
 
   return (
     <Select
-  {...props}
-  {...forgeuiPositionProps(props)}
-  icon={Icon ? <Icon path="" /> : undefined}
->
+      {...props}
+      width="100%"
+      height="100%"
+      icon={Icon ? <Icon path="" /> : undefined}
+    >
       <option value="option1">Option 1</option>
       <option value="option2">Option 2</option>
       <option value="option3">Option 3</option>
