@@ -1,4 +1,4 @@
-# ForgeUI Studio — GETTING STARTED
+# ForgeUI Studio — GETTING STARTED.
 
 ============================================================
 FORGEUI STUDIO
