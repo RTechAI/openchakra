@@ -131,7 +131,11 @@ const exportToForgeUIOne = async () => {
     body: JSON.stringify({ code }),
   })
 
-  alert('Exported to ForgeUI-One')
+  await fetch('http://localhost:3030/flash', {
+  method: 'POST',
+})
+
+alert('Export + Flash started')
 }
 
   return (

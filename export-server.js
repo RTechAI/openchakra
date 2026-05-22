@@ -1,6 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const { exec } = require('child_process')
 
 const app = express()
 
@@ -34,6 +35,30 @@ app.post('/export', (req, res) => {
     res.json({
       ok: true,
       target,
+    })
+  } catch (err) {
+    console.error(err)
+
+    res.status(500).json({
+      ok: false,
+      error: String(err),
+    })
+  }
+})
+
+app.post('/flash', (req, res) => {
+  try {
+      const flashScript = path.resolve(
+     __dirname,
+      '../tools/flash-p4.bat'
+)
+
+    exec(`start "" "${flashScript}"`)
+
+    console.log('Launching flash-p4.bat')
+
+    res.json({
+      ok: true,
     })
   } catch (err) {
     console.error(err)

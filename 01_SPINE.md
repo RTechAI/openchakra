@@ -29,6 +29,267 @@ Editor engine mapped far enough to plan embedded/HMI mode safely.
 NEW SAVE POINT
 ============================================================
 
+# FORGEUI STUDIO → P4 HARDWARE PIPELINE BREAKTHROUGH
+
+Save point:
+FORGEUI_STUDIO_ONE_BUTTON_EXPORT_FLASH_PIPELINE_PROVEN__2026-05-23
+
+Meaning:
+ForgeUI Studio has now crossed from a browser/editor proof into a real deployment-capable embedded UI tooling system.
+
+The system can now:
+- generate LVGL C
+- export directly into ForgeUI-One
+- launch ESP-IDF build/flash automatically
+- deploy to physical ESP32-P4 hardware from the Studio workflow
+
+This is the first true “Studio → Hardware” deployment pipeline proof.
+
+Status:
+MAJOR PRODUCT-LEVEL BREAKTHROUGH / SAVE NOW
+
+---
+
+# MAJOR ARCHITECTURE SHIFT
+
+ForgeUI Studio is no longer behaving like:
+- a web UI experiment
+- a React playground
+- a modified OpenChakra fork
+
+It is now behaving like:
+- an embedded HMI toolchain
+- a deployment cockpit
+- a hardware-aware UI authoring system
+
+The architecture line has now clearly split into:
+
+Studio Side:
+- editor
+- drag/drop
+- property editing
+- LVGL code generation
+- export orchestration
+- flash orchestration
+
+Runtime Side:
+- ForgeUI-One
+- ESP-IDF
+- BSP ownership
+- LVGL runtime
+- hardware drivers
+- ESP32-P4 execution target
+
+This separation is now considered:
+CORRECT / PROVEN / REQUIRED
+
+---
+
+# CURRENT PROVEN PIPELINE
+
+ForgeUI Studio
+->
+ForgeUILvglExport.ts
+->
+export-server.js
+->
+generated LVGL C
+->
+ForgeUI-One
+->
+ESP-IDF build
+->
+ESP32-P4 flash
+->
+live hardware UI
+
+This is no longer theoretical.
+Physical hardware proof confirmed.
+
+---
+
+# CURRENT PROVEN USER FLOW
+
+1. Run:
+C:\ForgeUI\START_FORGEUI_STUDIO.bat
+
+2. Studio launches:
+- React editor
+- export bridge
+- localhost:3000
+- localhost:3030
+
+3. Press:
+P4 Export
+
+4. Pipeline now performs:
+- generate LVGL C
+- write 90_Studio_Export.c
+- launch flash-p4.bat
+- ESP-IDF build
+- flash ESP32-P4
+- monitor serial output
+
+5. Physical hardware updates live.
+
+Confirmed proof text rendered on hardware:
+- “First flash from studio”
+
+---
+
+# IMPORTANT DISCOVERY
+
+The hardest problem was NOT:
+- LVGL
+- ESP-IDF
+- React
+- OpenChakra
+- export generation
+
+The hardest problem was:
+TOOLCHAIN OWNERSHIP + WORKFLOW ORCHESTRATION
+
+Major confusion source identified:
+We were simultaneously:
+- developing the Studio
+- using the Studio
+- building firmware
+- flashing hardware
+
+inside overlapping VS Code + terminal sessions.
+
+This caused:
+- COM port conflicts
+- stale monitor ownership
+- ESP-IDF environment confusion
+- multiple runtime ownership confusion
+
+This is now understood as:
+NORMAL TOOLCHAIN TRANSITION PAIN
+
+---
+
+# IMPORTANT PRODUCT REALIZATION
+
+Future users should NOT need:
+- VS Code
+- ESP-IDF knowledge
+- terminals
+- PowerShell
+- idf.py commands
+
+Correct future user flow:
+
+Launch Studio
+->
+Design UI
+->
+Press Flash
+->
+Hardware updates
+
+This is now the long-term architecture direction.
+
+---
+
+# CURRENT KNOWN-GOOD FILES
+
+Studio exporter:
+C:\ForgeUI\Projects\ForgeUI-Studio\openchakra\src\forgeui\ForgeUILvglExport.ts
+
+Bridge server:
+C:\ForgeUI\Projects\ForgeUI-Studio\openchakra\export-server.js
+
+Flash launcher:
+C:\ForgeUI\Projects\ForgeUI-Studio\tools\flash-p4.bat
+
+Generated export target:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\90_Studio_Export.c
+
+Generated export header:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\90_Studio_Export.h
+
+Runtime insertion point:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\02_UI_Home.c
+
+One-click Studio launcher:
+C:\ForgeUI\START_FORGEUI_STUDIO.bat
+
+---
+
+# CURRENT KNOWN-GOOD FLASH RULE
+
+If flash fails with:
+- COM port busy
+- PermissionError(13)
+- Access denied
+
+Cause is usually:
+- stale idf.py monitor
+- stale VS Code terminal
+- old COM ownership
+
+Fix:
+- close old monitor terminals
+- unplug/replug device
+- rerun export/flash
+
+This is NOT considered a pipeline architecture failure.
+
+---
+
+# IMPORTANT VS CODE REALIZATION
+
+The parent workspace:
+C:\ForgeUI\Projects\ForgeUI-Studio
+
+is NOT itself an ESP-IDF project.
+
+ForgeUI-One is the actual ESP-IDF target project.
+
+This means:
+- ESP-IDF extension auto-detection becomes confused
+- default Build/Flash buttons do not naturally bind correctly
+- custom orchestration is currently preferred
+
+This is expected with the current split architecture.
+
+---
+
+# CURRENT LONG-TERM DIRECTION
+
+Do NOT:
+- embed React into firmware
+- merge OpenChakra into ESP-IDF
+- make firmware own Studio logic
+
+Correct direction is:
+
+Studio
+generates
+LVGL artifacts
+
+ForgeUI-One
+executes
+hardware runtime
+
+This architecture is now considered:
+LOCKED / CORRECT / PRODUCT VIABLE
+
+---
+
+Commit name:
+
+FORGEUI_STUDIO_ONE_BUTTON_P4_PIPELINE_PROVEN
+
+============================================================
+END SAVE POINT
+============================================================
+
+============================================================
+OLD SAVE POINT
+============================================================
+
 Save point:
 FORGEUI_STUDIO_SPECIAL_PREVIEW_NORMALIZATION_WAVE1__WRAPPER_ARCH_PROVEN__2026-05-21
 
@@ -313,7 +574,7 @@ Current architecture remains:
 - fixed-device viewport workflow
 
 ============================================================
-NEW SAVE POINT
+OLD SAVE POINT
 ============================================================
 
 Save point:
@@ -576,6 +837,8 @@ ForgeUI-One owns hardware runtime.
 ============================================================
 END SAVE UPDATE
 ============================================================
+
+
 
 ============================================================
 EXPORT PIPELINE TRUTH — NOW PROVEN
