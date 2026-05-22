@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react'
+import { generateForgeUILvglCode } from '~forgeui/ForgeUILvglExport'
 import {
   Box,
   Switch,
@@ -117,6 +118,22 @@ const Header = () => {
   const showCode = useSelector(getShowCode)
   const dispatch = useDispatch()
 
+  const components = useSelector(getComponents)
+
+const exportToForgeUIOne = async () => {
+  const code = generateForgeUILvglCode(components)
+
+  await fetch('http://localhost:3030/export', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code }),
+  })
+
+  alert('Exported to ForgeUI-One')
+}
+
   return (
     <DarkMode>
       <Flex
@@ -203,7 +220,17 @@ const Header = () => {
           </HStack>
 
           <Stack direction="row">
-            <CodeSandboxButton />
+  <CodeSandboxButton />
+
+      <Button
+       size="xs"
+       variant="ghost"
+        colorScheme="teal"
+         onClick={exportToForgeUIOne}
+  >
+    P4 Export
+  </Button>
+
             <Popover>
               {({ onClose }) => (
                 <>

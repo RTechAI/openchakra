@@ -317,448 +317,414 @@ NEW SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_ASSET_REGISTRY_V1__IMAGE_PIPELINE_OK__LAPTOP_VIEWPORT_FIX__2026-05-22
+FORGEUI_STUDIO_TO_FORGEUI_ONE_P4_FLASH_PROOF_OK__2026-05-22
 
 Meaning:
-ForgeUI Studio has now proven the first real asset-aware preview pipeline inside the modified OpenChakra engine.
+ForgeUI Studio has now proven the first real end-to-end bridge from Studio-side generated/exported LVGL code into the ForgeUI-One ESP32-P4 runtime template.
 
-This save point marks the transition from:
-- placeholder Image widget
-- manual URL testing only
-- raw custom prop testing
-- oversized laptop workflow issues
-
-toward:
-- real image preview rendering
-- registry-driven asset selection
-- inspector-controlled visual behavior
-- curated ForgeUI asset pipeline
-- laptop-usable editor viewport
+This is the first confirmed physical hardware proof that ForgeUI Studio can drive a real ForgeUI runtime target.
 
 Status:
-MAJOR ASSET PIPELINE BREAKTHROUGH / SAVE NOW
+MAJOR BREAKTHROUGH / HARDWARE PROOF COMPLETE
 
-============================================================
-CONFIRMED WORKING
-============================================================
+Confirmed working:
+- ForgeUI-Studio opened as parent workspace
+- openchakra remains the Studio/editor side
+- ForgeUI-One now lives beside openchakra as the runtime target template
+- ForgeUI-One builds from inside the ForgeUI-Studio workspace
+- stale copied CMake/build/bootloader cache issue fixed by deleting old build cache
+- ForgeUI-One flashes cleanly from:
+  C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One
+- ESP32-P4 boots successfully
+- ForgeUI-One one-page runtime still alive
+- 90_Studio_Export.c / .h added as first Studio export bridge
+- 02_UI_Home.c calls fg_studio_export_create(parent)
+- physical P4 screen displayed:
+  "Hello from ForgeUI Studio"
 
-Image Preview V1:
-- Image widget drops onto canvas
-- real image renders from URL
-- image moves correctly
-- image resizes correctly
-- resize handle stays attached
-- PreviewContainer ownership remains stable
-- no detached helper border
-- fallback SVG image works
-- source URL field works
-- preset image dropdown works
-- objectFit dropdown works
+Architecture now proven:
 
-Object fit modes proven:
-- contain
-- cover
-- fill
-
-Behavior confirmed:
-- contain preserves full image and may show bars
-- cover fills widget area and crops overflow
-- fill stretches image to widget shape
-
-============================================================
-FILES ADDED / UPDATED
-============================================================
-
-Added:
-- src/components/editor/previews/ImagePreview.tsx
-- src/forgeui/ForgeUIAssetRegistry.ts
-- src/forgeui/ForgeUIIconRegistry.ts
-
-Updated:
-- src/components/editor/ComponentPreview.tsx
-- src/components/inspector/panels/components/ImagePanel.tsx
-- src/components/inspector/panels/components/IconPanel.tsx
-- src/components/editor/Editor.tsx
-
-============================================================
-IMAGE PREVIEW ARCHITECTURE
-============================================================
-
-ComponentPreview now routes:
-
-Image
+ForgeUI Studio
 ->
-PreviewContainer
+generated/exported LVGL C bridge
 ->
-ImagePreview
-
-ImagePreview owns:
-- visual image rendering only
-- fallback SVG image
-- objectFit behavior
-- pointer-safe / drag-safe image display
-
-PreviewContainer still owns:
-- geometry
-- resize
-- selection
-- helper border
-- drag/move
-- width/height persistence
-
-Important rule confirmed:
-ImagePreview must NOT own geometry or useInteractive.
-
-============================================================
-IMAGE PANEL UPDATE
-============================================================
-
-ImagePanel now includes:
-- Source
-- Preset image
-- Fallback Src
-- Alt
-- Object fit
-- Html height
-- Html width
-
-Preset image dropdown is driven by:
-
-src/forgeui/ForgeUIAssetRegistry.ts
-
-This proves:
-- ForgeUI-owned asset registry
-- inspector-driven asset selection
-- registry -> inspector -> component props -> preview renderer path
-
-============================================================
-ASSET REGISTRY V1
-============================================================
-
-ForgeUIAssetRegistry.ts now owns stable image presets.
-
-Current purpose:
-- simple hardcoded preset image list
-- no upload system yet
-- no local filesystem asset browser yet
-- no thumbnail browser yet
-
-This is intentionally simple V1.
-
-Current registry role:
-- prove curated ForgeUI asset path
-- avoid random manual URL testing
-- establish pattern for future icons/themes/assets
-
-============================================================
-ICON REGISTRY V1
-============================================================
-
-ForgeUIIconRegistry.ts added as first ForgeUI-owned icon registry seed.
-
-IconPanel updated to include a Preset icon field above the existing IconControl.
-
-Current purpose:
-- prove icon registry pattern
-- prepare future icon picker
-- prepare future LVGL symbol/icon mapping
-- keep existing OpenChakra IconControl alive
-
-Icon registry is started but still needs deeper live testing/polish in the next pass.
-
-============================================================
-LAPTOP VIEWPORT FIX
-============================================================
-
-Editor viewport usability improved for laptop screens.
-
-Issue:
-- bottom horizontal browser/editor scrollbar made it hard to see left sidebar, canvas, and right inspector at the same time.
-
-Fix:
-- reduced outer Playground padding in Editor.tsx
-
-Result:
-- left sidebar, canvas, and inspector now fit better on laptop
-- less need to drag bottom scrollbar left/right
-- device viewport remains intact
-- image pipeline still works after layout change
-
-Do NOT shrink the active device size unless needed later.
-The first fix should remain editor padding/layout, not fake hardware resolution.
-
-============================================================
-CURRENT ARCHITECTURE TRUTH
-============================================================
-
-ForgeUI Studio now has a proven reusable pattern:
-
-ForgeUI registry
+ForgeUI-One runtime template
 ->
-Inspector control
+ESP-IDF build
 ->
-component props
+ESP32-P4 flash
 ->
-normalized preview renderer
-->
-PreviewContainer geometry wrapper
+live LVGL object on hardware
 
-This pattern is now proven with:
-- Image assets
-- objectFit visual behavior
-- early Icon registry wiring
+Important correction:
+Do NOT embed React into firmware.
+Do NOT turn ForgeUI-One into a React runtime.
+Do NOT tangle OpenChakra directly into ESP-IDF.
 
-This is a major step toward:
-- asset-aware UI design
-- theme packs
-- icon packs
-- LVGL image mapping
-- embedded HMI screen composition
+Correct ownership:
+- ForgeUI Studio = editor / exporter / flasher / tool cockpit
+- ForgeUI-One = runtime firmware template / BSP owner / LVGL hardware target
+- 90_Studio_Export.c = generated bridge file owned by Studio export path
 
-============================================================
-DO NOT REGRESS
-============================================================
+Current folder structure:
 
-Do NOT:
-- return Image to raw Chakra passthrough
-- remove PreviewContainer ownership
-- put useInteractive inside ImagePreview
-- rely only on Custom Props for common ForgeUI controls
-- overbuild upload/browser features yet
-- start LVGL export before registry/preview contracts are stable
+C:\ForgeUI\Projects\ForgeUI-Studio\
+  openchakra\
+  ForgeUI-One\
 
-Do:
-- keep ForgeUI-owned registries under src/forgeui/
-- keep inspector controls simple
-- keep preview files visual-only
-- prove each pipeline one step at a time
-- maintain frequent save points
+Current build / flash proof commands:
 
-============================================================
-NEXT RECOMMENDED STEP
-============================================================
+cd C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One
+idf.py build
+idf.py flash monitor
+
+Important implementation note:
+VS Code ESP-IDF buttons may not attach automatically because the root workspace is ForgeUI-Studio, not ForgeUI-One.
+PowerShell build/flash is the known-good path for now.
 
 Next mission:
-ICON REGISTRY V1 LIVE TEST + POLISH
+Replace the hand-written 90_Studio_Export.c proof with a Studio-generated export file.
+
+Next practical step:
+Make ForgeUI Studio export one simple generated LVGL screen/card/label into:
+
+ForgeUI-One/main/90_Studio_Export.c
+ForgeUI-One/main/90_Studio_Export.h
+
+Then build and flash again.
 
 Goal:
-- drop/select Icon widget
-- verify Preset icon field appears
-- select registry icons
-- confirm icon changes live
-- confirm size/color controls still work
-- decide if IconPreview needs normalization polish
-
-After that:
-- ForgeUI component palette V1
-- Asset browser / thumbnail picker V1
-- LVGL export mapping investigation
-
-============================================================
-HANDOVER NOTE FOR NEXT CHAT
-============================================================
-
-Continue from:
-
-FORGEUI_STUDIO_ASSET_REGISTRY_V1__IMAGE_PIPELINE_OK__LAPTOP_VIEWPORT_FIX__2026-05-22
-
-Current known-good state:
-- ForgeUI Studio running at localhost:3000
-- Image widget renders real URLs
-- Image resize/move works
-- objectFit dropdown works
-- preset image dropdown works
-- ForgeUIAssetRegistry.ts is alive
-- ForgeUIIconRegistry.ts has been started
-- IconPanel has been wired with Preset icon field
-- laptop viewport usability improved by reducing editor padding
-
-Immediate next task:
-Test Icon Registry V1 live in the UI.
-
-Start by:
-1. Drag Icon widget onto canvas.
-2. Select Icon widget.
-3. Confirm Preset icon appears in inspector.
-4. Try registry values.
-5. Confirm icon changes live.
-6. Check size/color still work.
-7. If broken, inspect IconPreview/IconControl path before adding more features.
+Studio button/export action writes the file, then PowerShell or future Studio command builds/flashes it.
 
 ============================================================
 END SAVE UPDATE
 ============================================================
 
 ============================================================
-POSITION LAYER INVESTIGATION UPDATE
+NEW SAVE POINT
 ============================================================
 
-Confirmed files inspected:
+Save point:
+FORGEUI_STUDIO_TO_HARDWARE_TEXT_STYLE_EXPORT_OK__2026-05-23
 
-- WithChildrenPreviewContainer.tsx
-- PreviewContainer.tsx
-- utils/defaultProps.ts
-- NumberControl.tsx
-- NumberInputPanel.tsx
-- Panels.tsx
+Meaning:
+ForgeUI Studio has successfully exported generated LVGL C directly into ForgeUI-One through the localhost bridge, ForgeUI-One compiled/flashed the generated screen to ESP32-P4, and live runtime rendering on real hardware was visually confirmed.
 
-Important confirmed architecture:
+This is now the first proven end-to-end Studio-to-hardware toolchain with generated styling applied.
 
-OpenChakra already has a clean enough path for ForgeUI embedded positioning.
+Status:
+MAJOR MILESTONE / REAL HARDWARE PIPELINE PROVEN
 
-The safest positioning layer is NOT inside individual component panels.
+Confirmed working:
+- one-click BAT launcher starts Studio + Bridge
+- ForgeUI Studio dev server runs on localhost:3000
+- export bridge runs on localhost:3030
+- P4 Export button generates LVGL C
+- generated LVGL C writes into ForgeUI-One
+- ForgeUI-One builds with ESP-IDF
+- ForgeUI-One flashes to ESP32-P4
+- ESP32-P4 renders the generated UI on the physical screen
+- generated Text now exports readable white text styling
+- generated font sizing path started through LVGL font export
 
-Do NOT add X/Y/W/H controls separately into ButtonPanel, BoxPanel, TextPanel, etc.
+Current proven runtime display:
+- ForgeUI One
+- "It’s a good day to code"
+- Sat 23
+- 09:28
 
-Correct architecture:
-Create one shared ForgeUI layout/position inspector panel and mount it globally in Panels.tsx.
+Important correction:
+The dark/unreadable text issue was not a hardware/display issue.
+It was an export styling issue.
 
-Recommended future file:
+Fix applied in:
+src/forgeui/ForgeUILvglExport.ts
 
-src/forgeui/ForgeUILayoutPanel.tsx
+Text export now emits:
+lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);
 
-or:
+This proves generated styling can flow from Studio exporter into real LVGL runtime.
 
-src/components/inspector/panels/forgeui/ForgeUILayoutPanel.tsx
-
-Purpose:
-A global embedded layout panel for selected components.
-
-Initial controls:
-- positionMode
-- x
-- y
-- w
-- h
-
-Recommended first props:
-positionMode: "flow" | "absolute"
-x: number
-y: number
-w: number
-h: number
-
-NumberControl is already reusable and can be used for:
-- X
-- Y
-- Width
-- Height
-
-Panels.tsx is the correct mount point.
-
-Future pattern:
-
-<>
-  <ForgeUILayoutPanel />
-
-  {type === 'Button' && <ButtonPanel />}
-  {type === 'Box' && <BoxPanel />}
-  ...
-</>
-
-Reason:
-Positioning is editor/runtime layout metadata.
-It is not component-specific behavior.
-
-Preview architecture finding:
-
-There are two preview wrappers:
-
-1.
-WithChildrenPreviewContainer.tsx
-
-Used for child-capable components.
-It is also a drop target.
-It currently forces:
-
-pos: 'relative'
-
-This must not be deleted blindly.
-
-Future absolute mode should override this only when:
-
-positionMode === "absolute"
-
-2.
-PreviewContainer.tsx
-
-Used for simple components.
-It currently passes props directly into React.createElement.
-
-Both wrappers will need the same ForgeUI positioning behavior later.
-
-Correct future helper:
-
-src/forgeui/ForgeUIPositionProps.ts
-
-Purpose:
-Convert ForgeUI embedded layout props into safe Chakra preview props.
-
-Future shape:
-
-export function forgeuiPositionProps(props: any) {
-  if (props?.positionMode !== "absolute") {
-    return {}
-  }
-
-  return {
-    pos: "absolute",
-    left: Number(props.x || 0),
-    top: Number(props.y || 0),
-    width: Number(props.w || 160),
-    height: Number(props.h || 80),
-  }
-}
-
-Important:
-Do not duplicate position logic in both preview containers.
-
-Use one shared helper later.
-
-DEFAULT_PROPS finding:
-
-utils/defaultProps.ts is the component birth/default prop layer.
-
-It is a safe future place to add default ForgeUI positioning props for ForgeUI-native widgets.
-
-Example future ForgeUI-native defaults:
-
-FGTile: {
-  positionMode: "absolute",
-  x: 40,
-  y: 40,
-  w: 240,
-  h: 120
-}
-
-Do not add embedded defaults globally to every existing Chakra component yet.
-
-First implementation rule:
-Manual inspector positioning first.
-
-Do NOT do yet:
-- coordinate drag/drop
-- grid snapping
-- bounds clamp
-- LVGL export
-- Redux/state rewrite
-- rewriting useDropComponent
-- changing current tree model
-
-Correct sequence:
-1. Add ForgeUILayoutPanel.
-2. Mount it globally in Panels.tsx.
-3. Add position props manually through inspector.
-4. Add shared ForgeUIPositionProps helper.
-5. Apply helper to PreviewContainer and WithChildrenPreviewContainer.
-6. Only after manual absolute positioning works, add drop coordinate capture.
-7. Only after positioning is stable, add LVGL export mapping.
-
-Current conclusion:
-ForgeUI Studio can add embedded/HMI positioning as a bolt-on layer beside the existing OpenChakra flow layout engine.
-
-This keeps current Chakra drag/drop alive while opening the path toward LVGL-style fixed-screen design.
 ============================================================
+CURRENT KNOWN-GOOD FOLDERS / FILES
+============================================================
+
+Parent workspace:
+C:\ForgeUI\Projects\ForgeUI-Studio\
+
+Studio editor:
+C:\ForgeUI\Projects\ForgeUI-Studio\openchakra\
+
+ForgeUI runtime target:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\
+
+Main Studio exporter:
+C:\ForgeUI\Projects\ForgeUI-Studio\openchakra\src\forgeui\ForgeUILvglExport.ts
+
+Local export bridge:
+C:\ForgeUI\Projects\ForgeUI-Studio\openchakra\export-server.js
+
+Generated C output:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\90_Studio_Export.c
+
+Generated header:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\90_Studio_Export.h
+
+Runtime insertion point:
+C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One\main\02_UI_Home.c
+
+One-click launcher:
+C:\ForgeUI\START_FORGEUI_STUDIO.bat
+
+============================================================
+CURRENT ONE-CLICK LAUNCHER
+============================================================
+
+File:
+C:\ForgeUI\START_FORGEUI_STUDIO.bat
+
+Current working content:
+
+@echo off
+
+cd /d C:\ForgeUI\Projects\ForgeUI-Studio\openchakra
+start "ForgeUI Studio" powershell -NoExit -Command "npm run dev"
+
+timeout /t 2 >nul
+
+cd /d C:\ForgeUI\Projects\ForgeUI-Studio\openchakra
+start "ForgeUI Bridge" powershell -NoExit -Command "node export-server.js"
+
+timeout /t 2 >nul
+
+start "" "http://localhost:3000"
+
+Notes:
+- No pause line.
+- Bridge file is export-server.js, not server.js.
+- export-server.js lives inside openchakra.
+- If bridge fails, check PowerShell path first.
+
+============================================================
+CURRENT BUILD / FLASH COMMANDS
+============================================================
+
+Run from:
+
+cd C:\ForgeUI\Projects\ForgeUI-Studio\ForgeUI-One
+
+Build:
+
+idf.py build
+
+Flash and monitor:
+
+idf.py flash monitor
+
+Fast combined command:
+
+idf.py build flash monitor
+
+If COM port is needed:
+
+idf.py -p COMx flash monitor
+
+============================================================
+CURRENT EXPORT PIPELINE TRUTH
+============================================================
+
+ForgeUI Studio
+->
+src/forgeui/ForgeUILvglExport.ts
+->
+localhost bridge:
+http://localhost:3030/export
+->
+openchakra/export-server.js
+->
+ForgeUI-One/main/90_Studio_Export.c
+->
+ForgeUI-One ESP-IDF build
+->
+ESP32-P4 flash
+->
+live LVGL render on hardware
+
+This is no longer theoretical.
+This has been physically proven.
+
+============================================================
+CURRENT NEXT MILESTONE
+============================================================
+
+Next export upgrades should be:
+
+1. export background colours
+2. export box colours
+3. export radius
+4. export button colours
+5. export font sizes cleanly
+6. export alignment helpers
+7. export images/icons
+8. export nested layouts safely
+
+Do not drift into React runtime.
+Do not embed Studio into firmware.
+Studio generates LVGL artifacts.
+ForgeUI-One owns hardware runtime.
+
+============================================================
+END SAVE UPDATE
+============================================================
+
+============================================================
+EXPORT PIPELINE TRUTH — NOW PROVEN
+============================================================
+
+ForgeUI Studio is no longer only generating preview code.
+
+The project has now proven a live editor-to-firmware bridge.
+
+Current proven export/runtime flow:
+
+ForgeUI Studio
+(editor/runtime preview)
+->
+LVGL C generator
+->
+localhost export bridge (:3030)
+->
+writes generated output into:
+ForgeUI-One/main/90_Studio_Export.c
+->
+ForgeUI-One ESP-IDF build
+->
+ESP32-P4 flash
+->
+live LVGL runtime on hardware
+
+This is now the PRIMARY architecture direction.
+
+============================================================
+IMPORTANT OWNERSHIP RULE
+============================================================
+
+ForgeUI Studio does NOT own:
+- BSP
+- display drivers
+- touch drivers
+- WiFi
+- SD
+- audio
+- runtime loop
+- LVGL runtime lifecycle
+
+ForgeUI-One owns:
+- ESP-IDF runtime
+- BSP
+- hardware bring-up
+- LVGL lifecycle
+- display/touch/audio/WiFi/SD
+- runtime task ownership
+- application shell
+
+ForgeUI Studio owns:
+- editor
+- viewport
+- component layout
+- property editing
+- export generation
+- future flashing/tooling workflow
+
+Generated export files are:
+- build artifacts
+- replaceable/generated outputs
+- not hand-owned runtime architecture files
+
+============================================================
+CURRENT GENERATED FILE CONTRACT
+============================================================
+
+Current generated bridge files:
+
+90_Studio_Export.c
+90_Studio_Export.h
+
+Current runtime integration:
+
+02_UI_Home.c
+->
+fg_studio_export_create(parent)
+
+This establishes the first stable runtime insertion point.
+
+============================================================
+IMPORTANT STRATEGIC DIRECTION
+============================================================
+
+ForgeUI-One should remain:
+- simple
+- stable
+- hardware-owned
+- runtime-owned
+
+Studio should inject:
+- generated screens
+- generated widgets
+- generated layouts
+
+NOT:
+- editor runtime logic
+- React runtime
+- browser runtime
+- web renderer
+
+Correct long-term architecture:
+
+ForgeUI Studio
+->
+generated LVGL artifacts
+->
+ForgeUI runtime templates
+->
+embedded hardware targets
+
+============================================================
+CURRENT KNOWN-GOOD EXPORT PATH
+============================================================
+
+Studio dev server:
+npm run dev
+
+Export bridge server:
+node export-server.js
+
+Current export endpoint:
+http://localhost:3030/export
+
+Current export proof:
+P4 Export button successfully writes generated LVGL C into:
+
+ForgeUI-One/main/90_Studio_Export.c
+
+============================================================
+NEXT MILESTONE
+============================================================
+
+Next export evolution goals:
+
+- multiple objects
+- boxes
+- buttons
+- colors/styles
+- width/height export
+- x/y coordinate export
+- generated layout trees
+- multiple pages/screens
+- future LVGL component mapping
+
+Current export proof is:
+FOUNDATIONAL / REAL / MAJOR
 
 ============================================================
 PROJECT LOCATION
