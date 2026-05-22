@@ -58,6 +58,7 @@ type ComponentType =
   | 'Progress'
   | 'Radio'
   | 'RadioGroup'
+  | 'Slider'
   | 'Select'
   | 'SimpleGrid'
   | 'Spinner'

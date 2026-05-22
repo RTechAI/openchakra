@@ -317,81 +317,38 @@ NEW SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_NORMALIZATION_WAVE1_90_PERCENT__INTRINSIC_CHAKRA_PATTERN_PROVEN__2026-05-21
+FORGEUI_STUDIO_IMAGE_PREVIEW_PIPELINE_V1__CORE_WIDGET_NORMALIZATION_PROVEN__2026-05-22
 
 Meaning:
-ForgeUI Studio has now successfully proven the intrinsic Chakra normalization architecture across the primary ForgeUI Core widget set.
+ForgeUI Studio has now successfully proven the first reusable normalized widget-preview architecture across both intrinsic controls and interactive controls inside the modified OpenChakra engine.
 
 This marks the transition from:
-- unstable mixed Chakra behavior
-- invisible intrinsic controls
+- random Chakra passthrough rendering
+- unstable intrinsic controls
 - detached helper borders
-- wrapper inconsistency
+- widget-specific hacks
+- inconsistent preview ownership
 
-to:
-- a repeatable normalized embedded preview model.
-
-The ForgeUI Core widget layer is now visibly alive and usable.
+toward:
+- normalized preview routing
+- reusable PreviewContainer ownership
+- editor-safe embedded widget rendering
+- curated ForgeUI Core widgets
+- scalable preview architecture
 
 Status:
-MAJOR NORMALIZATION BREAKTHROUGH / SAVE NOW
+MAJOR NORMALIZATION + FORGEUI CORE BREAKTHROUGH / SAVE NOW
 
 ============================================================
-NEW MAJOR ARCHITECTURE TRUTH
+CURRENT PROVEN NORMALIZED WIDGETS
 ============================================================
 
-The correct embedded-editor rendering model is now confirmed as:
+Confirmed alive and stable:
 
-PreviewContainer
-->
-normalized intrinsic preview
-->
-visible editor-safe visual state
-
-NOT:
-
-raw Chakra intrinsic renderer
-->
-browser-default inline rendering
-->
-invisible editor behavior
-
-============================================================
-NEW PROVEN NORMALIZATION PATTERN
-============================================================
-
-Proven safe normalization pattern:
-
-1.
-Remove component from generic/simple intrinsic bucket.
-
-2.
-Create explicit standalone case in ComponentPreview.tsx.
-
-3.
-Wrap component using PreviewContainer.
-
-4.
-Force wrapper ownership:
-- resize
-- geometry
-- helper border
-- selection
-- hover
-
-5.
-Force preview ownership:
-- visible rendering
-- full-size fill behavior
-- explicit labels/placeholders
-- embedded-editor-safe visuals
-
-============================================================
-CURRENT KNOWN-GOOD NORMALIZED CORE WIDGETS
-============================================================
-
-Confirmed alive and normalized:
-
+- Slider
+- NumberInput
+- Progress
+- CircularProgress
 - Button
 - Text
 - Input
@@ -400,7 +357,7 @@ Confirmed alive and normalized:
 - Checkbox
 - Radio
 - Select
-- Image
+- Image (placeholder stage)
 - Box
 - CloseButton
 - IconButton
@@ -413,150 +370,166 @@ Confirmed alive and normalized:
 - Kbd
 
 ============================================================
-NEW IMPORTANT DISCOVERY
+IMPORTANT ARCHITECTURE TRUTH
 ============================================================
 
-Many Chakra components previously assumed to be:
-- "simple components"
+The correct ForgeUI Studio rendering architecture is now confirmed as:
 
-were actually:
+ComponentPreview
+->
+PreviewContainer / WithChildrenPreviewContainer
+->
+normalized preview renderer
+->
+optional interactive preview behavior
 
-- intrinsic inline renderers
-- browser-native controls
-- wrapper-hostile controls
-- invisible-by-default editor components
+NOT:
 
-The issue source was NOT:
-- Redux
-- react-rnd
-- PreviewContainer
+raw Chakra renderer
+->
+intrinsic browser layout
+->
+preview-owned geometry
+->
+broken editor behavior
+
+============================================================
+PREVIEW OWNERSHIP RULE
+============================================================
+
+PreviewContainer owns:
+- geometry
+- resize
+- helper border
+- drag ownership
+- selection
+- wrapper sizing
+- react-rnd ownership
+- width/height persistence
+
+Preview files own:
+- visual rendering only
+- embedded-editor-safe visuals
+- local React state if required
+- labels/placeholders
+- component-specific display behavior
+
+Preview files must NOT own:
+- useInteractive()
+- geometry
+- resize
 - drag/drop
-- geometry persistence
-
-The issue source was:
-RAW INTRINSIC CHAKRA RENDERING INSIDE AN EMBEDDED EDITOR CONTEXT
+- positioning
+- wrapper sizing
 
 ============================================================
-NEW FORGEUI CORE SIDEBAR LAYER
+INTERACTIVE PREVIEW STATUS
 ============================================================
 
-Sidebar architecture is now split into:
+Slider:
+- draggable
+- resizable
+- live interactive value updates
+- wrapper ownership stable
 
-ForgeUI Core
-- curated supported widgets
-- normalized editor-safe widgets
-- future export-safe widgets
+NumberInput:
+- normalized successfully
+- interactive preview stable
+- local state pattern proven
 
-Future:
-Advanced Chakra
-- experimental/raw widgets
-- non-normalized widgets
-- lower-priority compatibility bucket
+Progress:
+- normalized preview proven
+- moved out of raw wrapped bucket
+- routed through dedicated ProgressPreview.tsx
 
-This is the first major step away from:
-- OpenChakra generic component chaos
+CircularProgress:
+- normalized preview path proven
+- routed through dedicated CircularProgressPreview.tsx
+- resize/polish still imperfect at extreme scales
+- considered acceptable V1 baseline
+
+============================================================
+FORGEUI CORE SIDEBAR STATUS
+============================================================
+
+ForgeUI Core widget registry is now alive.
+
+Current curated ForgeUI Core widgets include:
+- Button
+- Text
+- Input
+- Textarea
+- Switch
+- Checkbox
+- Radio
+- Slider
+- Progress
+- CircularProgress
+- NumberInput
+- Select
+- Image
+- Box
+
+This marks the first real separation between:
+- curated/stable ForgeUI widgets
+
+and:
+
+- raw/experimental Chakra components
+
+============================================================
+IMPORTANT CURRENT DISCOVERY
+============================================================
+
+The project is now reaching the point where proving:
+- image previews
+- icon previews
+- embedded asset rendering
+- LVGL-style visual workflows
+
+is more strategically important than endlessly polishing Chakra edge-case widgets.
+
+Current Image widget is still placeholder-only.
+
+This is now the next important proof target.
+
+============================================================
+NEXT MISSION LOCKED
+============================================================
+
+IMAGE PREVIEW PIPELINE V1
+
+Goal:
+- real image preview rendering
+- centered/stable image previews
+- resize-safe image rendering
+- local asset support
+- embedded icon/tile workflow foundation
+- future LVGL asset/export alignment
+
+Next chat should begin with:
+- inspecting current Image routing
+- replacing placeholder Image preview
+- proving Chakra.Image inside PreviewContainer
+- testing local asset rendering
+- beginning embedded asset preview architecture
+
+============================================================
+CURRENT STRATEGIC DIRECTION
+============================================================
+
+ForgeUI Studio is now visibly transitioning away from:
+- generic OpenChakra component rendering
 
 toward:
-- ForgeUI Studio product identity
+- embedded/HMI-oriented visual editor architecture
 
-============================================================
-NEW VISUAL PREVIEW RULE
-============================================================
-
-Editor previews should prefer:
-- visible labels
-- visible placeholders
-- centered preview content
-- obvious editor-safe visuals
-
-Examples:
-- Input -> "Input value"
-- Textarea -> "Textarea value"
-- Image -> "Image"
-- Box -> "Box"
-- Select -> explicit label + visible options
-
-Reason:
-ForgeUI Studio is an embedded/HMI editor,
-not a browser DOM inspector.
-
-============================================================
-CURRENT KNOWN PAIN POINT
-============================================================
-
-Select controls remain partially awkward due to:
-- native browser rendering
-- popup ownership
-- intrinsic sizing behavior
-- focus stealing
-- browser dropdown implementation
-
-Current Select behavior is considered:
-ACCEPTABLE V1
-
-Do not burn major architecture time on Select polish yet.
-
-============================================================
-CURRENT IMPORTANT FILE TRUTH
-============================================================
-
-ComponentPreview.tsx is now evolving into:
-
-- renderer ownership switchboard
-- normalization routing layer
-- editor-safe intrinsic renderer layer
-
-It is no longer:
-- simple Chakra passthrough routing only
-
-============================================================
-CURRENT SAFE NEXT TARGETS
-============================================================
-
-Best next candidates:
-
-1.
-NumberInput normalization
-
-2.
-helper border polish
-
-3.
-ForgeUI Core visual consistency
-
-4.
-future Advanced Chakra bucket
-
-5.
-grid snap investigation
-
-NOT YET:
-- LVGL export
-- engine rewrite
-- drag coordinate rewrite
-- Redux rewrite
-- advanced preset normalization
-
-============================================================
-CURRENT ASSESSMENT
-============================================================
-
-ForgeUI Studio is now visibly transitioning from:
-
-generic modified OpenChakra
-
-into:
-
-a real embedded/HMI visual editor.
-
-The normalization architecture is now:
-- repeatable
-- teachable
-- scalable
-- maintainable
-- fast to extend
-
-OpenChakra adaptation path remains fully validated.
+The current direction is now technically credible for:
+- LVGL workflows
+- ESP32-P4 UI design
+- ForgeUI dashboard/tile systems
+- future asset pipelines
+- future LVGL export tooling
 
 ============================================================
 END SAVE UPDATE

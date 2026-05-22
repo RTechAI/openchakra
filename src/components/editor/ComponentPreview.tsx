@@ -26,6 +26,9 @@ import NumberInputPreview from '~components/editor/previews/NumberInputPreview'
 import BreadcrumbPreview from './previews/BreadcrumbPreview'
 import BreadcrumbItemPreview from './previews/BreadcrumbItemPreview'
 import HighlightPreview from './previews/HighlightPreview'
+import SliderPreview from '~components/editor/previews/SliderPreview'
+import ProgressPreview from '~components/editor/previews/ProgressPreview'
+import CircularProgressPreview from '~components/editor/previews/CircularProgressPreview'
 import StatGroupPreview, {
   StatHelpTextPreview,
   StatPreview,
@@ -124,7 +127,7 @@ case 'Switch':
     case 'Spinner':
     //case 'Checkbox':
     // case 'Textarea':
-    case 'CircularProgress':
+    //case 'CircularProgress':
     case 'Heading':
     // case 'Switch':
     case 'FormLabel':
@@ -149,8 +152,7 @@ case 'Switch':
       )
     // Wrapped functional components (forward ref issue)
     case 'AlertIcon':
-    case 'Progress':
-    // case 'CloseButton':
+// case 'CloseButton':
     case 'AccordionIcon':
     case 'Code':
     case 'ListIcon':
@@ -309,6 +311,50 @@ case 'CloseButton':
       {...forwardedProps}
     >
       <IconButtonPreview component={component} />
+    </PreviewContainer>
+  )
+
+  case 'Slider':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <SliderPreview component={component} />
+    </PreviewContainer>
+  )
+
+  case 'NumberInput':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <NumberInputPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'CircularProgress':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <CircularProgressPreview component={component} />
+    </PreviewContainer>
+  )
+
+case 'Progress':
+  return (
+    <PreviewContainer
+      component={component}
+      enableVisualHelper
+      {...forwardedProps}
+    >
+      <ProgressPreview component={component} />
     </PreviewContainer>
   )
 

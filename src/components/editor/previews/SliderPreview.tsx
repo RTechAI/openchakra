@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
 import * as Chakra from '@chakra-ui/react'
 
-interface IProps {
-  component: IComponent
-}
-
-const NumberInputPreview = ({ component }: IProps) => {
+const SliderPreview: React.FC<IPreviewProps> = ({ component }) => {
   const [value, setValue] = useState(50)
 
   return (
@@ -19,24 +15,23 @@ const NumberInputPreview = ({ component }: IProps) => {
       padding="10px"
     >
       <Chakra.Text color="white" fontSize="sm">
-        Number Input {value}
+        Slider {value}%
       </Chakra.Text>
 
-      <Chakra.NumberInput
+      <Chakra.Slider
         value={value}
         min={0}
         max={100}
-        onChange={(_, v) => setValue(v || 0)}
+        onChange={setValue}
       >
-        <Chakra.NumberInputField />
+        <Chakra.SliderTrack>
+          <Chakra.SliderFilledTrack />
+        </Chakra.SliderTrack>
 
-        <Chakra.NumberInputStepper>
-          <Chakra.NumberIncrementStepper />
-          <Chakra.NumberDecrementStepper />
-        </Chakra.NumberInputStepper>
-      </Chakra.NumberInput>
+        <Chakra.SliderThumb />
+      </Chakra.Slider>
     </Chakra.Box>
   )
 }
 
-export default NumberInputPreview
+export default SliderPreview
