@@ -317,224 +317,277 @@ NEW SAVE POINT
 ============================================================
 
 Save point:
-FORGEUI_STUDIO_IMAGE_PREVIEW_PIPELINE_V1__CORE_WIDGET_NORMALIZATION_PROVEN__2026-05-22
+FORGEUI_STUDIO_ASSET_REGISTRY_V1__IMAGE_PIPELINE_OK__LAPTOP_VIEWPORT_FIX__2026-05-22
 
 Meaning:
-ForgeUI Studio has now successfully proven the first reusable normalized widget-preview architecture across both intrinsic controls and interactive controls inside the modified OpenChakra engine.
+ForgeUI Studio has now proven the first real asset-aware preview pipeline inside the modified OpenChakra engine.
 
-This marks the transition from:
-- random Chakra passthrough rendering
-- unstable intrinsic controls
-- detached helper borders
-- widget-specific hacks
-- inconsistent preview ownership
+This save point marks the transition from:
+- placeholder Image widget
+- manual URL testing only
+- raw custom prop testing
+- oversized laptop workflow issues
 
 toward:
-- normalized preview routing
-- reusable PreviewContainer ownership
-- editor-safe embedded widget rendering
-- curated ForgeUI Core widgets
-- scalable preview architecture
+- real image preview rendering
+- registry-driven asset selection
+- inspector-controlled visual behavior
+- curated ForgeUI asset pipeline
+- laptop-usable editor viewport
 
 Status:
-MAJOR NORMALIZATION + FORGEUI CORE BREAKTHROUGH / SAVE NOW
+MAJOR ASSET PIPELINE BREAKTHROUGH / SAVE NOW
 
 ============================================================
-CURRENT PROVEN NORMALIZED WIDGETS
+CONFIRMED WORKING
 ============================================================
 
-Confirmed alive and stable:
+Image Preview V1:
+- Image widget drops onto canvas
+- real image renders from URL
+- image moves correctly
+- image resizes correctly
+- resize handle stays attached
+- PreviewContainer ownership remains stable
+- no detached helper border
+- fallback SVG image works
+- source URL field works
+- preset image dropdown works
+- objectFit dropdown works
 
-- Slider
-- NumberInput
-- Progress
-- CircularProgress
-- Button
-- Text
-- Input
-- Textarea
-- Switch
-- Checkbox
-- Radio
-- Select
-- Image (placeholder stage)
-- Box
-- CloseButton
-- IconButton
-- Icon
-- Link
-- Alert
-- AspectRatio
-- AvatarGroup
-- Badge
-- Kbd
+Object fit modes proven:
+- contain
+- cover
+- fill
+
+Behavior confirmed:
+- contain preserves full image and may show bars
+- cover fills widget area and crops overflow
+- fill stretches image to widget shape
 
 ============================================================
-IMPORTANT ARCHITECTURE TRUTH
+FILES ADDED / UPDATED
 ============================================================
 
-The correct ForgeUI Studio rendering architecture is now confirmed as:
+Added:
+- src/components/editor/previews/ImagePreview.tsx
+- src/forgeui/ForgeUIAssetRegistry.ts
+- src/forgeui/ForgeUIIconRegistry.ts
 
-ComponentPreview
+Updated:
+- src/components/editor/ComponentPreview.tsx
+- src/components/inspector/panels/components/ImagePanel.tsx
+- src/components/inspector/panels/components/IconPanel.tsx
+- src/components/editor/Editor.tsx
+
+============================================================
+IMAGE PREVIEW ARCHITECTURE
+============================================================
+
+ComponentPreview now routes:
+
+Image
 ->
-PreviewContainer / WithChildrenPreviewContainer
+PreviewContainer
+->
+ImagePreview
+
+ImagePreview owns:
+- visual image rendering only
+- fallback SVG image
+- objectFit behavior
+- pointer-safe / drag-safe image display
+
+PreviewContainer still owns:
+- geometry
+- resize
+- selection
+- helper border
+- drag/move
+- width/height persistence
+
+Important rule confirmed:
+ImagePreview must NOT own geometry or useInteractive.
+
+============================================================
+IMAGE PANEL UPDATE
+============================================================
+
+ImagePanel now includes:
+- Source
+- Preset image
+- Fallback Src
+- Alt
+- Object fit
+- Html height
+- Html width
+
+Preset image dropdown is driven by:
+
+src/forgeui/ForgeUIAssetRegistry.ts
+
+This proves:
+- ForgeUI-owned asset registry
+- inspector-driven asset selection
+- registry -> inspector -> component props -> preview renderer path
+
+============================================================
+ASSET REGISTRY V1
+============================================================
+
+ForgeUIAssetRegistry.ts now owns stable image presets.
+
+Current purpose:
+- simple hardcoded preset image list
+- no upload system yet
+- no local filesystem asset browser yet
+- no thumbnail browser yet
+
+This is intentionally simple V1.
+
+Current registry role:
+- prove curated ForgeUI asset path
+- avoid random manual URL testing
+- establish pattern for future icons/themes/assets
+
+============================================================
+ICON REGISTRY V1
+============================================================
+
+ForgeUIIconRegistry.ts added as first ForgeUI-owned icon registry seed.
+
+IconPanel updated to include a Preset icon field above the existing IconControl.
+
+Current purpose:
+- prove icon registry pattern
+- prepare future icon picker
+- prepare future LVGL symbol/icon mapping
+- keep existing OpenChakra IconControl alive
+
+Icon registry is started but still needs deeper live testing/polish in the next pass.
+
+============================================================
+LAPTOP VIEWPORT FIX
+============================================================
+
+Editor viewport usability improved for laptop screens.
+
+Issue:
+- bottom horizontal browser/editor scrollbar made it hard to see left sidebar, canvas, and right inspector at the same time.
+
+Fix:
+- reduced outer Playground padding in Editor.tsx
+
+Result:
+- left sidebar, canvas, and inspector now fit better on laptop
+- less need to drag bottom scrollbar left/right
+- device viewport remains intact
+- image pipeline still works after layout change
+
+Do NOT shrink the active device size unless needed later.
+The first fix should remain editor padding/layout, not fake hardware resolution.
+
+============================================================
+CURRENT ARCHITECTURE TRUTH
+============================================================
+
+ForgeUI Studio now has a proven reusable pattern:
+
+ForgeUI registry
+->
+Inspector control
+->
+component props
 ->
 normalized preview renderer
 ->
-optional interactive preview behavior
+PreviewContainer geometry wrapper
 
-NOT:
+This pattern is now proven with:
+- Image assets
+- objectFit visual behavior
+- early Icon registry wiring
 
-raw Chakra renderer
-->
-intrinsic browser layout
-->
-preview-owned geometry
-->
-broken editor behavior
-
-============================================================
-PREVIEW OWNERSHIP RULE
-============================================================
-
-PreviewContainer owns:
-- geometry
-- resize
-- helper border
-- drag ownership
-- selection
-- wrapper sizing
-- react-rnd ownership
-- width/height persistence
-
-Preview files own:
-- visual rendering only
-- embedded-editor-safe visuals
-- local React state if required
-- labels/placeholders
-- component-specific display behavior
-
-Preview files must NOT own:
-- useInteractive()
-- geometry
-- resize
-- drag/drop
-- positioning
-- wrapper sizing
+This is a major step toward:
+- asset-aware UI design
+- theme packs
+- icon packs
+- LVGL image mapping
+- embedded HMI screen composition
 
 ============================================================
-INTERACTIVE PREVIEW STATUS
+DO NOT REGRESS
 ============================================================
 
-Slider:
-- draggable
-- resizable
-- live interactive value updates
-- wrapper ownership stable
+Do NOT:
+- return Image to raw Chakra passthrough
+- remove PreviewContainer ownership
+- put useInteractive inside ImagePreview
+- rely only on Custom Props for common ForgeUI controls
+- overbuild upload/browser features yet
+- start LVGL export before registry/preview contracts are stable
 
-NumberInput:
-- normalized successfully
-- interactive preview stable
-- local state pattern proven
-
-Progress:
-- normalized preview proven
-- moved out of raw wrapped bucket
-- routed through dedicated ProgressPreview.tsx
-
-CircularProgress:
-- normalized preview path proven
-- routed through dedicated CircularProgressPreview.tsx
-- resize/polish still imperfect at extreme scales
-- considered acceptable V1 baseline
+Do:
+- keep ForgeUI-owned registries under src/forgeui/
+- keep inspector controls simple
+- keep preview files visual-only
+- prove each pipeline one step at a time
+- maintain frequent save points
 
 ============================================================
-FORGEUI CORE SIDEBAR STATUS
+NEXT RECOMMENDED STEP
 ============================================================
 
-ForgeUI Core widget registry is now alive.
-
-Current curated ForgeUI Core widgets include:
-- Button
-- Text
-- Input
-- Textarea
-- Switch
-- Checkbox
-- Radio
-- Slider
-- Progress
-- CircularProgress
-- NumberInput
-- Select
-- Image
-- Box
-
-This marks the first real separation between:
-- curated/stable ForgeUI widgets
-
-and:
-
-- raw/experimental Chakra components
-
-============================================================
-IMPORTANT CURRENT DISCOVERY
-============================================================
-
-The project is now reaching the point where proving:
-- image previews
-- icon previews
-- embedded asset rendering
-- LVGL-style visual workflows
-
-is more strategically important than endlessly polishing Chakra edge-case widgets.
-
-Current Image widget is still placeholder-only.
-
-This is now the next important proof target.
-
-============================================================
-NEXT MISSION LOCKED
-============================================================
-
-IMAGE PREVIEW PIPELINE V1
+Next mission:
+ICON REGISTRY V1 LIVE TEST + POLISH
 
 Goal:
-- real image preview rendering
-- centered/stable image previews
-- resize-safe image rendering
-- local asset support
-- embedded icon/tile workflow foundation
-- future LVGL asset/export alignment
+- drop/select Icon widget
+- verify Preset icon field appears
+- select registry icons
+- confirm icon changes live
+- confirm size/color controls still work
+- decide if IconPreview needs normalization polish
 
-Next chat should begin with:
-- inspecting current Image routing
-- replacing placeholder Image preview
-- proving Chakra.Image inside PreviewContainer
-- testing local asset rendering
-- beginning embedded asset preview architecture
+After that:
+- ForgeUI component palette V1
+- Asset browser / thumbnail picker V1
+- LVGL export mapping investigation
 
 ============================================================
-CURRENT STRATEGIC DIRECTION
+HANDOVER NOTE FOR NEXT CHAT
 ============================================================
 
-ForgeUI Studio is now visibly transitioning away from:
-- generic OpenChakra component rendering
+Continue from:
 
-toward:
-- embedded/HMI-oriented visual editor architecture
+FORGEUI_STUDIO_ASSET_REGISTRY_V1__IMAGE_PIPELINE_OK__LAPTOP_VIEWPORT_FIX__2026-05-22
 
-The current direction is now technically credible for:
-- LVGL workflows
-- ESP32-P4 UI design
-- ForgeUI dashboard/tile systems
-- future asset pipelines
-- future LVGL export tooling
+Current known-good state:
+- ForgeUI Studio running at localhost:3000
+- Image widget renders real URLs
+- Image resize/move works
+- objectFit dropdown works
+- preset image dropdown works
+- ForgeUIAssetRegistry.ts is alive
+- ForgeUIIconRegistry.ts has been started
+- IconPanel has been wired with Preset icon field
+- laptop viewport usability improved by reducing editor padding
+
+Immediate next task:
+Test Icon Registry V1 live in the UI.
+
+Start by:
+1. Drag Icon widget onto canvas.
+2. Select Icon widget.
+3. Confirm Preset icon appears in inspector.
+4. Try registry values.
+5. Confirm icon changes live.
+6. Check size/color still work.
+7. If broken, inspect IconPreview/IconControl path before adding more features.
 
 ============================================================
 END SAVE UPDATE
 ============================================================
-
 
 ============================================================
 POSITION LAYER INVESTIGATION UPDATE

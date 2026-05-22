@@ -53,7 +53,7 @@ const Editor: React.FC = () => {
       minWidth="10rem"
       overflow="auto"
       position="relative"
-      p={8}
+      p={3}
       onClick={onSelectBackground}
     >
       <Box

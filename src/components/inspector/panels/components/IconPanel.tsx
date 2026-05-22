@@ -7,31 +7,45 @@ import FormControl from '~components/inspector/controls/FormControl'
 import { useForm } from '~hooks/useForm'
 import usePropsSelector from '~hooks/usePropsSelector'
 import IconControl from '~components/inspector/controls/IconControl'
+import { FORGEUI_ICON_ASSETS } from '~forgeui/ForgeUIIconRegistry'
 
 const IconPanel = () => {
   const { setValueFromEvent } = useForm()
 
   const boxSize = usePropsSelector('boxSize')
+  const icon = usePropsSelector('icon')
 
   return (
-    <>
-      <IconControl label="Icon" name="icon" />
+  <>
+    <FormControl label="Preset icon" htmlFor="presetIcon">
+      <InputSuggestion
+        value={icon || ''}
+        handleChange={setValueFromEvent}
+        name="icon"
+      >
+        {FORGEUI_ICON_ASSETS.map((asset, index) => (
+          <ComboboxOption key={index} value={asset.icon} />
+        ))}
+      </InputSuggestion>
+    </FormControl>
 
-      <FormControl label="Size" htmlFor="boxSize">
-        <InputSuggestion
-          value={boxSize}
-          handleChange={setValueFromEvent}
-          name="boxSize"
-        >
-          {Object.keys(theme.sizes).map((option, index) => (
-            <ComboboxOption key={index} value={option} />
-          ))}
-        </InputSuggestion>
-      </FormControl>
+    <IconControl label="Icon" name="icon" />
 
-      <ColorsControl withFullColor label="Color" name="color" enableHues />
-    </>
-  )
+    <FormControl label="Size" htmlFor="boxSize">
+      <InputSuggestion
+        value={boxSize}
+        handleChange={setValueFromEvent}
+        name="boxSize"
+      >
+        {Object.keys(theme.sizes).map((option, index) => (
+          <ComboboxOption key={index} value={option} />
+        ))}
+      </InputSuggestion>
+    </FormControl>
+
+    <ColorsControl withFullColor label="Color" name="color" enableHues />
+  </>
+)
 }
 
 export default memo(IconPanel)

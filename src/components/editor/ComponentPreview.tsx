@@ -29,6 +29,7 @@ import HighlightPreview from './previews/HighlightPreview'
 import SliderPreview from '~components/editor/previews/SliderPreview'
 import ProgressPreview from '~components/editor/previews/ProgressPreview'
 import CircularProgressPreview from '~components/editor/previews/CircularProgressPreview'
+import ImagePreview from '~components/editor/previews/ImagePreview'
 import StatGroupPreview, {
   StatHelpTextPreview,
   StatPreview,
@@ -437,18 +438,7 @@ case 'Image':
       enableVisualHelper
       {...forwardedProps}
     >
-      <Chakra.Box
-        width="100%"
-        height="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        border="1px dashed #666"
-        color="gray.400"
-        fontSize="sm"
-      >
-        Image
-      </Chakra.Box>
+      <ImagePreview component={component} />
     </PreviewContainer>
   )
 
